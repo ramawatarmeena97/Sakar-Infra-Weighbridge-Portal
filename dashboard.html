@@ -22,6 +22,24 @@ body{
   text-align:center;
   margin-bottom:20px;
   color:white;
+  position:relative;
+}
+
+/* logout button top right */
+.logout-btn{
+  position:absolute;
+  top:0;
+  right:0;
+  padding:8px 15px;
+  background:#e74c3c;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+.logout-btn:hover{
+  background:#c0392b;
 }
 
 /* big container */
@@ -83,6 +101,9 @@ th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
 <div class="header">
 <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
 <p>Dashboard</p>
+
+<!-- Logout button -->
+<button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
 <!-- AUDIO PANEL -->
@@ -132,10 +153,23 @@ th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
 
 <!-- AUDIO FILES -->
 <audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
-<audio id="galat" src="galat.mp3"></audio>
+<audio id="galat" src="galat.mp3.mp3"></audio>
 <audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
 
 <script>
+/* ===== LOGIN CHECK ===== */
+// Agar user login nahi hai to redirect
+if(!localStorage.getItem("loggedIn")){
+    window.location.href="index.html"; // yaha aapka login page ka naam
+}
+
+/* ===== LOGOUT FUNCTION ===== */
+function logout(){
+    localStorage.removeItem("loggedIn");
+    window.location.href="index.html";
+}
+
+/* ===== AUDIO CONTROL ===== */
 let currentAudio=null;
 
 function playAudio(id){
@@ -155,16 +189,14 @@ document.addEventListener("keydown",function(e){
  if(e.key=="0") stopAudio();
 });
 
-/* WEIGHT SOFTWARE */
+/* ===== WEIGHT SOFTWARE ===== */
 const slider=document.getElementById("weightSlider");
 const display=document.getElementById("weightDisplay");
 const addBtn=document.getElementById("addRecordBtn");
 const tableBody=document.querySelector("#recordTable tbody");
 let serial=1;
 
-slider.addEventListener("input",()=>{
- display.textContent=`Weight: ${slider.value} kg`;
-});
+slider.addEventListener("input",()=>{ display.textContent=`Weight: ${slider.value} kg`; });
 
 addBtn.addEventListener("click",()=>{
  let row=document.createElement("tr");
@@ -174,9 +206,8 @@ addBtn.addEventListener("click",()=>{
  alert("Record Added Successfully");
 });
 
-document.getElementById("printSlipBtn").addEventListener("click",()=>{
-  window.print();
-});
+document.getElementById("printSlipBtn").addEventListener("click",()=>{ window.print(); });
+
 </script>
 
 </body>
