@@ -92,7 +92,8 @@ function login(){
   var u = document.getElementById("user").value;
   var p = document.getElementById("pass").value;
 
-  if(u=="admin" && p=="12345"){
+  if(u=="admin" && p=="12345")
+  if(u=="Sakar" && p=="12345"){
       localStorage.setItem("loggedIn", "true"); // save login status
       window.location.href="dashboard.html";   // redirect to dashboard
   } else {
@@ -123,3 +124,4 @@ window.onload = function() {
 </div>
 </body>
 </html>
+
