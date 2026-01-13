@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sakar Infra Weighbridge Portal</title>
+
+<style>
+body{
+  font-family: Arial;
+  background: linear-gradient(135deg,#0083ff,#00ffa6);
+  text-align:center;
+  color:white;
+}
+
+button{
+  padding:12px 25px;
+  font-size:18px;
+  margin:10px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+}
+
+.card{
+  background:#00000055;
+  padding:20px;
+  width:450px;
+  margin:auto;
+  border-radius:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
+
+<div class="card">
+<h2>Audio Control Panel</h2>
+
+<button onclick="playAudio('vajan_sahi')">Vajan Sahi Hai</button>
+<button onclick="playAudio('galat')">Vajan Galat Hai</button>
+<button onclick="playAudio('site_band')">Site Nahi Chal Rahi – Gaadi Piche Karein</button>
+
+<br>
+
+<button onclick="pauseAudio()">⏸ Pause</button>
+<button onclick="stopAudio()">⛔ Stop</button>
+
+<p>Keyboard Shortcuts:</p>
+<p>1 = Vajan Sahi Hai | 2 = Vajan Galat Hai | 3 = Site Nahi Chal Rahi | 0 = Stop</p>
+</div>
+
+<audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
+<audio id="galat" src="galat.mp3.mp3"></audio>
+<audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
+
+<script>
+let currentAudio = null;
+
+function playAudio(id){
+    if(currentAudio){
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+    currentAudio = document.getElementById(id);
+    currentAudio.play();
+}
+
+function pauseAudio(){
+    if(currentAudio){
+        currentAudio.pause();
+    }
+}
+
+function stopAudio(){
+    if(currentAudio){
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+}
+
+// keyboard control
+document.addEventListener("keydown",function(e){
+    if(e.key=="1"){
+        playAudio("vajan_sahi");
+    }
+    if(e.key=="2"){
+        playAudio("galat");
+    }
+    if(e.key=="3"){
+        playAudio("site_band");
+    }
+    if(e.key=="0"){
+        stopAudio();
+    }
+});
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Weight Software</title>
+<style>
+  body { font-family: Arial; background:#f0f2f5; display:flex; justify-content:center; padding:20px;}
+  .container { background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.2); width:500px;}
+  h2 { text-align:center; color:#007bff; }
+  #weightDisplay { font-size:30px; color:green; font-weight:bold; text-align:center; margin:20px 0;}
+  #recordTable { width:100%; border-collapse: collapse; margin-top:20px;}
+  #recordTable th, #recordTable td { border:1px solid #ccc; padding:8px; text-align:center;}
+  button { margin-top:15px; padding:10px 20px; font-size:16px; cursor:pointer; border:none; border-radius:5px; background:#007bff; color:white;}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Weight Software</h2>
+  
+  <div id="weightDisplay">Weight: 0 kg</div>
+  
+  <input type="range" min="0" max="150" value="0" id="weightSlider" style="width:100%;">
+  
+  <button id="addRecordBtn">Add Record</button>
+  <button id="printSlipBtn">Print Weight Slip</button>
+  
+  <table id="recordTable">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Date & Time</th>
+        <th>Weight (kg)</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+<script>
+const slider = document.getElementById('weightSlider');
+const display = document.getElementById('weightDisplay');
+const addBtn = document.getElementById('addRecordBtn');
+const printBtn = document.getElementById('printSlipBtn');
+const tableBody = document.querySelector('#recordTable tbody');
+
+let records = [];
+let maxWeight = 150;
+
+// Real-time weight display
+slider.addEventListener('input', ()=>{
+    display.textContent = `W
