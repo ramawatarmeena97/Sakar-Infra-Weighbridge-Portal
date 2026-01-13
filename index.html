@@ -2,50 +2,119 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Sakar Infra Weighbridge Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakar Infra Weighbridge Portal - Login</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0083ff,#00ffa6);
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0083ff, #00ffa6);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
 }
 
-.box{
-  background:#00000066;
-  padding:40px;
-  border-radius:20px;
-  text-align:center;
-  width:340px;
-  box-shadow:0 0 25px rgba(0,0,0,.3);
+.box {
+  background: #ffffffee;
+  padding: 40px 30px;
+  border-radius: 20px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
-h1{ margin-bottom:15px; }
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
 
-button{
-  padding:12px 25px;
-  font-size:16px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
+.box h2 {
+  margin-bottom: 5px;
+  color: #013369;
+}
+
+.box h4 {
+  margin-bottom: 25px;
+  color: #555;
+  font-weight: normal;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+input:focus {
+  border: 1px solid #0083ff;
+  box-shadow: 0 0 8px rgba(0, 131, 255, 0.4);
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(45deg, #0083ff, #00ffa6);
+  color: white;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background: linear-gradient(45deg, #00ffa6, #0083ff);
+  transform: translateY(-3px);
+}
+
+.box p {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
 }
 </style>
+
+<script>
+function login(){
+  var u = document.getElementById("user").value;
+  var p = document.getElementById("pass").value;
+
+  if(u=="admin" && p=="12345"){
+      localStorage.setItem("loggedIn", "true"); // save login status
+      window.location.href="dashboard.html";
+  } else {
+      alert("Wrong Username or Password");
+  }
+}
+
+// Prevent logged-in user from seeing login page
+window.onload = function() {
+  if(localStorage.getItem("loggedIn") === "true"){
+    window.location.href = "dashboard.html";
+  }
+};
+</script>
+
 </head>
-
 <body>
-
 <div class="box">
-  <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
-  <p>Welcome</p>
+  <h2>Login</h2>
+  <h4>Sakar Infra Weighbridge Portal</h4>
 
-  <button onclick="window.location.href='login.html'">Go to Login</button>
+  <input id="user" placeholder="Enter Username">
+  <input id="pass" type="password" placeholder="Enter Password">
+
+  <button onclick="login()">Login</button>
+
+  <p>&copy; 2026 Sakar Infra</p>
 </div>
-
 </body>
 </html>
