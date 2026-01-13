@@ -1,154 +1,183 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Sakar Infra Weighbridge Portal</title>
+<meta charset="UTF-8">
+<title>Sakar Infra Weighbridge Portal - Dashboard</title>
 
 <style>
+*{margin:0; padding:0; box-sizing:border-box; font-family:Arial,Segoe UI;}
+
 body{
-  font-family: Arial;
-  background: linear-gradient(135deg,#0083ff,#00ffa6);
+  min-height:100vh;
+  background:linear-gradient(135deg,#007bff,#00ffa6);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:30px;
+  color:#222;
+}
+
+/* top heading */
+.header{
   text-align:center;
+  margin-bottom:20px;
   color:white;
 }
 
-button{
-  padding:12px 25px;
-  font-size:18px;
-  margin:10px;
-  border-radius:10px;
-  border:none;
-  cursor:pointer;
+/* big container */
+.wrapper{
+  max-width:1100px;
+  width:100%;
 }
 
+/* card design */
 .card{
-  background:#00000055;
-  padding:20px;
-  width:450px;
-  margin:auto;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
   border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  margin-bottom:25px;
+}
+
+/* buttons */
+button{
+  padding:12px 22px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:15px;
+  margin:5px;
+}
+
+.blue{background:#007bff; color:white;}
+.red{background:#ff3b3b; color:white;}
+.green{background:#00c853; color:white;}
+.gray{background:#444; color:white;}
+
+table{width:100%; border-collapse:collapse; margin-top:10px; background:white;}
+th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
+
+/* weight text */
+#weightDisplay{
+  font-size:28px;
+  font-weight:bold;
+  color:#006400;
+  text-align:center;
+  margin:10px 0;
+}
+
+/* footer */
+.footer{
+  text-align:center;
+  color:white;
+  margin-top:10px;
 }
 </style>
-
 </head>
 
 <body>
 
+<div class="wrapper">
+
+<div class="header">
 <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
+<p>Dashboard</p>
+</div>
 
+<!-- AUDIO PANEL -->
 <div class="card">
-<h2>Audio Control Panel</h2>
+<h2>🔊 Audio Control Panel</h2>
 
-<button onclick="playAudio('vajan_sahi')">Vajan Sahi Hai</button>
-<button onclick="playAudio('galat')">Vajan Galat Hai</button>
-<button onclick="playAudio('site_band')">Site Nahi Chal Rahi – Gaadi Piche Karein</button>
+<button class="green" onclick="playAudio('vajan_sahi')">Vajan Sahi Hai</button>
+<button class="red" onclick="playAudio('galat')">Vajan Galat Hai</button>
+<button class="blue" onclick="playAudio('site_band')">Site Nahi Chal Rahi – Gaadi Piche Karein</button>
 
 <br>
 
-<button onclick="pauseAudio()">⏸ Pause</button>
-<button onclick="stopAudio()">⛔ Stop</button>
+<button class="gray" onclick="pauseAudio()">⏸ Pause</button>
+<button class="red" onclick="stopAudio()">⛔ Stop</button>
 
-<p>Keyboard Shortcuts:</p>
-<p>1 = Vajan Sahi Hai | 2 = Vajan Galat Hai | 3 = Site Nahi Chal Rahi | 0 = Stop</p>
+<p><b>Keyboard Shortcuts:</b> 1 = Sahi • 2 = Galat • 3 = Site Band • 0 = Stop</p>
 </div>
 
+<!-- WEIGHT SOFTWARE -->
+<div class="card">
+<h2>⚖ Weight Software</h2>
+
+<div id="weightDisplay">Weight: 0 kg</div>
+
+<input type="range" min="0" max="150" value="0" id="weightSlider" style="width:100%;">
+
+<button class="blue" id="addRecordBtn">Add Record</button>
+<button class="green" id="printSlipBtn">Print Weight Slip</button>
+
+<table id="recordTable">
+<thead>
+<tr>
+<th>S.No</th>
+<th>Date & Time</th>
+<th>Weight (kg)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="footer">
+© 2026 Sakar Infra | All Rights Reserved
+</div>
+
+</div>
+
+<!-- AUDIO FILES -->
 <audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
-<audio id="galat" src="galat.mp3.mp3"></audio>
+<audio id="galat" src="galat.mp3"></audio>
 <audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
 
 <script>
-let currentAudio = null;
+let currentAudio=null;
 
 function playAudio(id){
-    if(currentAudio){
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-    }
-    currentAudio = document.getElementById(id);
-    currentAudio.play();
+ if(currentAudio){currentAudio.pause(); currentAudio.currentTime=0;}
+ currentAudio=document.getElementById(id);
+ currentAudio.play();
 }
 
-function pauseAudio(){
-    if(currentAudio){
-        currentAudio.pause();
-    }
-}
+function pauseAudio(){ if(currentAudio){currentAudio.pause();} }
 
-function stopAudio(){
-    if(currentAudio){
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-    }
-}
+function stopAudio(){ if(currentAudio){currentAudio.pause(); currentAudio.currentTime=0;} }
 
-// keyboard control
 document.addEventListener("keydown",function(e){
-    if(e.key=="1"){
-        playAudio("vajan_sahi");
-    }
-    if(e.key=="2"){
-        playAudio("galat");
-    }
-    if(e.key=="3"){
-        playAudio("site_band");
-    }
-    if(e.key=="0"){
-        stopAudio();
-    }
+ if(e.key=="1") playAudio("vajan_sahi");
+ if(e.key=="2") playAudio("galat");
+ if(e.key=="3") playAudio("site_band");
+ if(e.key=="0") stopAudio();
+});
+
+/* WEIGHT SOFTWARE */
+const slider=document.getElementById("weightSlider");
+const display=document.getElementById("weightDisplay");
+const addBtn=document.getElementById("addRecordBtn");
+const tableBody=document.querySelector("#recordTable tbody");
+let serial=1;
+
+slider.addEventListener("input",()=>{
+ display.textContent=`Weight: ${slider.value} kg`;
+});
+
+addBtn.addEventListener("click",()=>{
+ let row=document.createElement("tr");
+ let now=new Date().toLocaleString();
+ row.innerHTML=`<td>${serial++}</td><td>${now}</td><td>${slider.value}</td>`;
+ tableBody.appendChild(row);
+ alert("Record Added Successfully");
+});
+
+document.getElementById("printSlipBtn").addEventListener("click",()=>{
+  window.print();
 });
 </script>
 
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Weight Software</title>
-<style>
-  body { font-family: Arial; background:#f0f2f5; display:flex; justify-content:center; padding:20px;}
-  .container { background:#fff; padding:30px; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.2); width:500px;}
-  h2 { text-align:center; color:#007bff; }
-  #weightDisplay { font-size:30px; color:green; font-weight:bold; text-align:center; margin:20px 0;}
-  #recordTable { width:100%; border-collapse: collapse; margin-top:20px;}
-  #recordTable th, #recordTable td { border:1px solid #ccc; padding:8px; text-align:center;}
-  button { margin-top:15px; padding:10px 20px; font-size:16px; cursor:pointer; border:none; border-radius:5px; background:#007bff; color:white;}
-</style>
-</head>
-<body>
-
-<div class="container">
-  <h2>Weight Software</h2>
-  
-  <div id="weightDisplay">Weight: 0 kg</div>
-  
-  <input type="range" min="0" max="150" value="0" id="weightSlider" style="width:100%;">
-  
-  <button id="addRecordBtn">Add Record</button>
-  <button id="printSlipBtn">Print Weight Slip</button>
-  
-  <table id="recordTable">
-    <thead>
-      <tr>
-        <th>S.No</th>
-        <th>Date & Time</th>
-        <th>Weight (kg)</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-</div>
-
-<script>
-const slider = document.getElementById('weightSlider');
-const display = document.getElementById('weightDisplay');
-const addBtn = document.getElementById('addRecordBtn');
-const printBtn = document.getElementById('printSlipBtn');
-const tableBody = document.querySelector('#recordTable tbody');
-
-let records = [];
-let maxWeight = 150;
-
-// Real-time weight display
-slider.addEventListener('input', ()=>{
-    display.textContent = `W
