@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Sakar Infra Weighbridge Portal - Login</title>
 
 <style>
@@ -68,6 +68,7 @@ button {
   background: linear-gradient(45deg, #0083ff, #00ffa6);
   color: white;
   transition: background 0.3s, transform 0.2s;
+  margin-top: 10px;
 }
 
 button:hover {
@@ -80,41 +81,123 @@ button:hover {
   font-size: 14px;
   color: #888;
 }
-</style>
-
-<script>
-function login(){
-  var u = document.getElementById("user").value;
-  var p = document.getElementById("pass").value;
-
-  if(u=="admin" && p=="12345"){
-      localStorage.setItem("loggedIn", "true"); // save login status
-      window.location.href="dashboard.html";
-  } else {
-      alert("Wrong Username or Password");
-  }
+.toggle-link {
+  color: #1e88e5;
+  cursor: pointer;
+  text-decoration: underline;
 }
-
-// Prevent logged-in user from seeing login page
-window.onload = function() {
-  if(localStorage.getItem("loggedIn") === "true"){
-    window.location.href = "dashboard.html";
-  }
-};
-</script>
-
+</style>
 </head>
 <body>
 <div class="box">
-  <h2>Login</h2>
+  <h2 id="form-title">Login</h2>
   <h4>Sakar Infra Weighbridge Portal</h4>
 
-  <input id="user" placeholder="Enter Username">
-  <input id="pass" type="password" placeholder="Enter Password">
+  <input id="user" placeholder="Enter Username" />
+  <input id="pass" type="password" placeholder="Enter Password" />
 
-  <button onclick="login()">Login</button>
+  <button id="actionBtn" onclick="login()">Login</button>
 
+  <p class="toggle-text">
+    Don't have an account? <span class="toggle-link" id="signupLink" onclick="switchToSignup()">Sign Up</span>
+    <span class="toggle-link" id="backToLoginLink" style="display:none;" onclick="switchToLogin()">Back to Login</span>
+  </p>
   <p>&copy; 2026 Sakar Infra</p>
 </div>
+
+<script>
+function generateCaptcha() {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
+let captchaCode = generateCaptcha();
+
+function switchToSignup() {
+  document.getElementById("form-title").innerText = "Sign Up";
+  document.getElementById("actionBtn").innerText = "Register";
+
+  document.getElementById("signupLink").style.display = "none";
+  document.getElementById("backToLoginLink").style.display = "inline";
+
+  document.getElementById("user").value = "";
+  document.getElementById("pass").value = "";
+  document.getElementById("user").placeholder = "Enter New Username";
+  document.getElementById("pass").placeholder = "Enter Password";
+
+  document.getElementById("actionBtn").onclick = register;
+}
+
+function switchToLogin() {
+  document.getElementById("form-title").innerText = "Login";
+  document.getElementById("actionBtn").innerText = "Login";
+
+  document.getElementById("signupLink").style.display = "inline";
+  document.getElementById("backToLoginLink").style.display = "none";
+
+  document.getElementById("user").value = "";
+  document.getElementById("pass").value = "";
+  document.getElementById("user").placeholder = "Enter Username";
+  document.getElementById("pass").placeholder = "Enter Password";
+
+  document.getElementById("actionBtn").onclick = login;
+}
+
+// Login function
+function login() {
+  const username = document.getElementById("user").value.trim();
+  const password = document.getElementById("pass").value.trim();
+
+  if (username === "" || password === "") {
+    alert("Username and Password are required");
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem("users")) || {};
+
+  if (users[username] && users[username].password === password) {
+    alert("Login Successful (Demo)");
+    localStorage.setItem("loggedIn", "true");
+    // Redirect to dashboard or another page if needed
+    // window.location.href = "dashboard.html";
+  } else {
+    alert("Wrong Username or Password");
+  }
+}
+
+// Register function
+function register() {
+  const username = document.getElementById("user").value.trim();
+  const password = document.getElementById("pass").value.trim();
+
+  if (username === "" || password === "") {
+    alert("Enter username and password");
+    return;
+  }
+
+  const users = JSON.parse(localStorage.getItem("users")) || {};
+
+  if (users[username]) {
+    alert("Username already exists");
+    return;
+  }
+
+  users[username] = { password: password };
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Registration successful! Please login.");
+  switchToLogin();
+}
+
+// On load, check if logged in
+window.onload = function() {
+  if (localStorage.getItem("loggedIn") === "true") {
+    // Already logged in, redirect if needed
+    // window.location.href = "dashboard.html";
+    alert("Already logged in");
+  }
+  // Initialize form
+  switchToLogin();
+};
+</script>
+
 </body>
 </html>
