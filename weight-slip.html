@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -82,7 +82,8 @@ button {
 .print-btn { background: #16834a; }
 .back-btn { background: #1769aa; }
 
-/* Slip Design */
+/* SLIP DESIGN */
+
 .slip {
     background: white;
     border: 2px solid black;
@@ -165,7 +166,9 @@ button {
 }
 
 @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @page {
@@ -196,7 +199,9 @@ button {
     }
 
     .company h1 { font-size: 21px; }
+
     .slip-info { font-size: 13px; }
+
     .weight-table th,
     .weight-table td {
         padding: 9px 6px;
@@ -210,13 +215,21 @@ button {
 <div class="container">
 
     <div class="form-panel">
+
         <h2>MANUAL WEIGHT SLIP</h2>
 
         <div class="form-grid">
 
+            <!-- VEHICLE TYPE DROPDOWN -->
             <div>
                 <label>Vehicle Type</label>
-                <input id="vehicleType" placeholder="Truck / Tractor">
+
+                <select id="vehicleType">
+                    <option value="">Select Vehicle Type</option>
+                    <option value="TRUCK">TRUCK</option>
+                    <option value="TRACTOR">TRACTOR</option>
+                    <option value="OTHER">OTHER</option>
+                </select>
             </div>
 
             <div>
@@ -236,14 +249,16 @@ button {
 
             <div>
                 <label>Gross Weight (KG)</label>
-                <input type="number" id="gross" min="0" step="any"
-                placeholder="Gross Weight" oninput="calculateNet()">
+                <input type="number" id="gross" min="0"
+                step="any" placeholder="Gross Weight"
+                oninput="calculateNet()">
             </div>
 
             <div>
                 <label>Tare Weight (KG)</label>
-                <input type="number" id="tare" min="0" step="any"
-                placeholder="Tare Weight" oninput="calculateNet()">
+                <input type="number" id="tare" min="0"
+                step="any" placeholder="Tare Weight"
+                oninput="calculateNet()">
             </div>
 
             <div>
@@ -264,6 +279,7 @@ button {
         </div>
 
         <div class="actions">
+
             <button class="print-btn" onclick="printSlip()">
                 🖨️ PRINT SLIP
             </button>
@@ -271,7 +287,9 @@ button {
             <button class="back-btn" onclick="goDashboard()">
                 ← BACK TO DASHBOARD
             </button>
+
         </div>
+
     </div>
 
     <!-- PRINT SLIP -->
@@ -287,15 +305,41 @@ button {
         <div class="slip-title">WEIGHT SLIP</div>
 
         <div class="slip-info">
-            <div><b>Vehicle Type:</b> <span id="pVehicleType">-</span></div>
-            <div><b>Vehicle No.:</b> <span id="pVehicleNo">-</span></div>
-            <div><b>Party Name:</b> <span id="pParty">-</span></div>
-            <div><b>Mineral:</b> <span id="pMineral">-</span></div>
-            <div><b>Date:</b> <span id="pDate">-</span></div>
-            <div><b>Time:</b> <span id="pTime">-</span></div>
+
+            <div>
+                <b>Vehicle Type:</b>
+                <span id="pVehicleType">-</span>
+            </div>
+
+            <div>
+                <b>Vehicle No.:</b>
+                <span id="pVehicleNo">-</span>
+            </div>
+
+            <div>
+                <b>Party Name:</b>
+                <span id="pParty">-</span>
+            </div>
+
+            <div>
+                <b>Mineral:</b>
+                <span id="pMineral">-</span>
+            </div>
+
+            <div>
+                <b>Date:</b>
+                <span id="pDate">-</span>
+            </div>
+
+            <div>
+                <b>Time:</b>
+                <span id="pTime">-</span>
+            </div>
+
         </div>
 
         <table class="weight-table">
+
             <thead>
                 <tr>
                     <th>GROSS WEIGHT</th>
@@ -303,6 +347,7 @@ button {
                     <th>NET WEIGHT</th>
                 </tr>
             </thead>
+
             <tbody>
                 <tr>
                     <td id="pGross">0 KG</td>
@@ -310,9 +355,12 @@ button {
                     <td id="pNet">0 KG</td>
                 </tr>
             </tbody>
+
         </table>
 
-        <div class="thanks">THANKS FOR VISIT</div>
+        <div class="thanks">
+            THANKS FOR VISIT
+        </div>
 
         <div class="signature">
             <span>Operator Sign</span>
@@ -324,9 +372,14 @@ button {
 </div>
 
 <script>
+
+/* LOGIN CHECK */
+
 if (localStorage.getItem("loggedIn") !== "true") {
     window.location.href = "index.html";
 }
+
+/* DEFAULT DATE AND TIME */
 
 const today = new Date();
 
@@ -339,9 +392,17 @@ document.getElementById("time").value =
     String(today.getHours()).padStart(2, "0") + ":" +
     String(today.getMinutes()).padStart(2, "0");
 
+/* CALCULATE NET WEIGHT */
+
 function calculateNet() {
-    const gross = parseFloat(document.getElementById("gross").value) || 0;
-    const tare = parseFloat(document.getElementById("tare").value) || 0;
+
+    const gross = parseFloat(
+        document.getElementById("gross").value
+    ) || 0;
+
+    const tare = parseFloat(
+        document.getElementById("tare").value
+    ) || 0;
 
     const net = gross - tare;
 
@@ -349,7 +410,10 @@ function calculateNet() {
         net.toLocaleString("en-IN") + " KG";
 }
 
+/* UPDATE SLIP */
+
 function updateSlip() {
+
     const fields = [
         ["vehicleType", "pVehicleType"],
         ["vehicleNo", "pVehicleNo"],
@@ -360,12 +424,22 @@ function updateSlip() {
     ];
 
     fields.forEach(function(pair) {
+
         const value = document.getElementById(pair[0]).value;
-        document.getElementById(pair[1]).textContent = value || "-";
+
+        document.getElementById(pair[1]).textContent =
+            value || "-";
+
     });
 
-    const gross = parseFloat(document.getElementById("gross").value) || 0;
-    const tare = parseFloat(document.getElementById("tare").value) || 0;
+    const gross = parseFloat(
+        document.getElementById("gross").value
+    ) || 0;
+
+    const tare = parseFloat(
+        document.getElementById("tare").value
+    ) || 0;
+
     const net = gross - tare;
 
     document.getElementById("pGross").textContent =
@@ -378,18 +452,44 @@ function updateSlip() {
         net.toLocaleString("en-IN") + " KG";
 }
 
-function printSlip() {
-    const gross = parseFloat(document.getElementById("gross").value);
-    const tare = parseFloat(document.getElementById("tare").value);
+/* PRINT SLIP */
 
-    if (!document.getElementById("vehicleNo").value.trim()) {
+function printSlip() {
+
+    const vehicleType =
+        document.getElementById("vehicleType").value;
+
+    const vehicleNo =
+        document.getElementById("vehicleNo").value.trim();
+
+    const grossValue =
+        document.getElementById("gross").value;
+
+    const tareValue =
+        document.getElementById("tare").value;
+
+    const gross = parseFloat(grossValue);
+    const tare = parseFloat(tareValue);
+
+    if (!vehicleType) {
+        alert("कृपया Vehicle Type Select करें।");
+        return;
+    }
+
+    if (!vehicleNo) {
         alert("कृपया Vehicle Number भरें।");
         return;
     }
 
-    if (!document.getElementById("gross").value ||
-        !document.getElementById("tare").value) {
+    if (grossValue === "" || tareValue === "") {
         alert("कृपया Gross और Tare Weight भरें।");
+        return;
+    }
+
+    if (!Number.isFinite(gross) ||
+        !Number.isFinite(tare) ||
+        gross < 0 || tare < 0) {
+        alert("कृपया सही Weight भरें।");
         return;
     }
 
@@ -402,13 +502,18 @@ function printSlip() {
     window.print();
 }
 
+/* BACK TO DASHBOARD */
+
 function goDashboard() {
     window.location.href = "dashboard.html";
 }
 
+/* INITIAL UPDATE */
+
+calculateNet();
 updateSlip();
+
 </script>
 
 </body>
 </html>
-```
