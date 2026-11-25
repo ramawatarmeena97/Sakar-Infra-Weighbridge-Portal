@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Sakar Infra Weighbridge Portal - Dashboard</title>
 
 <style>
@@ -50,10 +49,6 @@ body {
     font-size:14px;
 }
 
-.logout-btn:hover {
-    background:#c0392b;
-}
-
 .card {
     background:rgba(255,255,255,0.15);
     backdrop-filter:blur(10px);
@@ -82,6 +77,7 @@ button:hover {
 .red {background:#ff3b3b;color:white;}
 .green {background:#00c853;color:white;}
 .gray {background:#444;color:white;}
+.purple {background:#7138d8;color:white;}
 
 .slip-panel {
     text-align:center;
@@ -101,9 +97,7 @@ button:hover {
 }
 
 @media(max-width:600px) {
-    body {
-        padding:12px;
-    }
+    body {padding:12px;}
 
     .header h1 {
         font-size:22px;
@@ -126,23 +120,19 @@ button:hover {
 
 <div class="wrapper">
 
-<!-- HEADER -->
 <div class="header">
-
     <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
     <p>Dashboard</p>
 
     <button class="logout-btn" onclick="logout()">
         Logout
     </button>
-
 </div>
 
 <!-- AUDIO CONTROL PANEL -->
 <div class="card">
 
     <h2>🔊 Audio Control Panel</h2>
-
     <br>
 
     <button class="green" onclick="playAudio('vajan_sahi')">
@@ -159,13 +149,8 @@ button:hover {
 
     <br>
 
-    <button class="gray" onclick="pauseAudio()">
-        ⏸ Pause
-    </button>
-
-    <button class="red" onclick="stopAudio()">
-        ⛔ Stop
-    </button>
+    <button class="gray" onclick="pauseAudio()">⏸ Pause</button>
+    <button class="red" onclick="stopAudio()">⛔ Stop</button>
 
     <button class="green" onclick="playAudio('gadi_aage')">
         🚛 Gaadi Aage Lao
@@ -184,7 +169,7 @@ button:hover {
 
 </div>
 
-<!-- WEIGHT SLIP BUTTON PANEL -->
+<!-- WEIGHT SLIP PANEL -->
 <div class="card slip-panel">
 
     <h2>📄 Weight Slip Management</h2>
@@ -195,21 +180,34 @@ button:hover {
 
     <button class="blue"
     onclick="window.location.href='weight-slip.html'">
-
         ⚖ WEIGHT SLIP
-
     </button>
 
- <button class="green"
-onclick="window.location.href='second-slip.html'">
-
+    <button class="green"
+    onclick="window.location.href='second-slip.html'">
         📋 SECOND SLIP
+    </button>
+
+</div>
+
+<!-- NEW E-RAWANNA PANEL -->
+<div class="card slip-panel">
+
+    <h2>🚛 RajMines E-Rawanna Management</h2>
+
+    <p style="margin:15px 0;">
+        Check Last E-Rawanna By Vehicle Number
+    </p>
+
+    <button class="purple"
+    onclick="window.location.href='last-erawanna.html'">
+
+        🔍 LAST E-RAWANNA CHECK
 
     </button>
 
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
     © 2026 Sakar Infra | All Rights Reserved
 </div>
@@ -218,31 +216,22 @@ onclick="window.location.href='second-slip.html'">
 
 <!-- AUDIO FILES -->
 <audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
-
 <audio id="galat" src="galat.mp3.mp3"></audio>
-
 <audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
-
 <audio id="gadi_aage" src="forward.wav"></audio>
-
 <audio id="gadi_piche" src="backward.wav"></audio>
 
 <script>
 
-/* LOGIN CHECK */
 if(!localStorage.getItem("loggedIn")) {
     window.location.href="index.html";
 }
 
-/* LOGOUT */
 function logout() {
-
     localStorage.removeItem("loggedIn");
-
     window.location.href="index.html";
 }
 
-/* AUDIO CONTROL */
 let currentAudio = null;
 
 function playAudio(id) {
@@ -260,31 +249,23 @@ function playAudio(id) {
 }
 
 function pauseAudio() {
-
     if(currentAudio) {
         currentAudio.pause();
     }
-
 }
 
 function stopAudio() {
-
     if(currentAudio) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
     }
-
 }
 
-/* KEYBOARD SHORTCUTS */
 document.addEventListener("keydown",function(e) {
 
     if(e.key === "1") playAudio("vajan_sahi");
-
     if(e.key === "2") playAudio("galat");
-
     if(e.key === "3") playAudio("site_band");
-
     if(e.key === "0") stopAudio();
 
 });
