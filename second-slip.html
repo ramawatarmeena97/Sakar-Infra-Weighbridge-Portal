@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second Weight Slip - Sakar Infra</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+}
+
+.slip {
+    background: white;
+    padding: 22px 28px;
+    color: black;
+    font-size: 12px;
+}
+
+.company {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.company h2 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 3px 0;
+}
+
+.company p {
+    margin: 4px 0;
+}
+
+.line {
+    border-top: 1px dashed black;
+    margin: 2px 0 8px;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 2px 0;
+}
+
+.details div {
+    padding: 2px 0;
+}
+
+.weights {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 8px;
+}
+
+.weight-row {
+    padding: 3px 0;
+}
+
+.weight-row span {
+    display: inline-block;
+}
+
+.weight-name {
+    width: 105px;
+}
+
+.weight-value {
+    width: 65px;
+}
+
+.weight-unit {
+    width: 30px;
+}
+
+.thanks {
+    text-align: center;
+    border-top: 1px solid black;
+    margin-top: 20px;
+    padding-top: 5px;
+    font-size: 12px;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 22px;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.print-btn {
+    background: #16834a;
+}
+
+.back-btn {
+    background: #1769aa;
+}
+
+.message {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    color: #b00020;
+}
+
+@page {
+    size: A5 landscape;
+    margin: 5mm;
+}
+
+@media print {
+    body {
+        padding: 0;
+        background: white;
+    }
+
+    .container {
+        max-width: none;
+        width: 100%;
+    }
+
+    .slip {
+        width: 100%;
+        padding: 15px 12px;
+    }
+
+    .actions,
+    .message {
+        display: none !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="slip" id="printArea">
+
+    <div class="company">
+        <h2>SAKAR INFRA MINERALS PRIVATE LIMITED</h2>
+        <p>DHINDHOL, JAIPUR</p>
+        <p>RAJASTHAN</p>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="details">
+
+        <div>
+            Vehicle type : <span id="vehicleType">-</span>
+        </div>
+
+        <div>
+            Party Name : <span id="partyName">-</span>
+        </div>
+
+        <div>
+            Vehicle No. : <span id="vehicleNo">-</span>
+        </div>
+
+        <div>
+            Mineral : <span id="mineral">-</span>
+        </div>
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="weights">
+
+        <div>
+
+            <div class="weight-row">
+                <span class="weight-name">Gross Weight :</span>
+                <span class="weight-value" id="gross">0</span>
+                <span class="weight-unit">KG</span>
+            </div>
+
+            <div class="weight-row">
+                <span class="weight-name">Tare Weight :</span>
+                <span class="weight-value" id="tare">0</span>
+                <span class="weight-unit">KG</span>
+            </div>
+
+            <div class="weight-row">
+                <span class="weight-name">Net Weight :</span>
+                <span class="weight-value" id="net">0</span>
+                <span class="weight-unit">KG</span>
+            </div>
+
+        </div>
+
+        <div style="text-align:center;">
+            Date : <span id="date">-</span>
+        </div>
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="thanks">
+        Thanks For Visit
+    </div>
+
+</div>
+
+<div class="actions">
+
+    <button class="print-btn" onclick="window.print()">
+        🖨 PRINT SECOND SLIP
+    </button>
+
+    <button class="back-btn"
+    onclick="window.location.href='dashboard.html'">
+        ← DASHBOARD
+    </button>
+
+</div>
+
+<div class="message" id="errorMessage" style="display:none;">
+    कोई Weight Slip Data नहीं मिला। पहले Manual Weight Slip भरकर Print करें।
+</div>
+
+</div>
+
+<script>
+
+/* LOGIN CHECK */
+if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "index.html";
+}
+
+/* LOAD FIRST SLIP DATA */
+const savedData = localStorage.getItem("sakarSecondSlip");
+
+if (!savedData) {
+
+    document.getElementById("printArea").style.display = "none";
+    document.getElementById("errorMessage").style.display = "block";
+
+} else {
+
+    const data = JSON.parse(savedData);
+
+    function show(id, value) {
+        document.getElementById(id).textContent = value || "-";
+    }
+
+    function formatWeight(value) {
+        return Number(value).toLocaleString("en-IN");
+    }
+
+    show("vehicleType", data.vehicleType);
+    show("vehicleNo", data.vehicleNo);
+    show("partyName", data.partyName);
+    show("mineral", data.mineral);
+    show("date", data.date);
+
+    show("gross", formatWeight(data.gross));
+    show("tare", formatWeight(data.tare));
+    show("net", formatWeight(data.net));
+
+    // Automatically open print window
+    window.addEventListener("load", function() {
+        setTimeout(function() {
+            window.print();
+        }, 500);
+    });
+
+}
+
+</script>
+
+</body>
+</html>
