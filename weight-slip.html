@@ -4,10 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Manual Weight Slip - Sakar Infra</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -79,10 +82,15 @@ button {
     cursor: pointer;
 }
 
-.print-btn { background: #16834a; }
-.back-btn { background: #1769aa; }
+.print-btn {
+    background: #16834a;
+}
 
-/* SLIP DESIGN */
+.back-btn {
+    background: #1769aa;
+}
+
+/* FIRST SLIP DESIGN */
 
 .slip {
     background: white;
@@ -198,9 +206,13 @@ button {
         padding: 10px;
     }
 
-    .company h1 { font-size: 21px; }
+    .company h1 {
+        font-size: 21px;
+    }
 
-    .slip-info { font-size: 13px; }
+    .slip-info {
+        font-size: 13px;
+    }
 
     .weight-table th,
     .weight-table td {
@@ -214,160 +226,174 @@ button {
 
 <div class="container">
 
-    <div class="form-panel">
+<!-- INPUT FORM -->
 
-        <h2>MANUAL WEIGHT SLIP</h2>
+<div class="form-panel">
 
-        <div class="form-grid">
+    <h2>MANUAL WEIGHT SLIP</h2>
 
-            <!-- VEHICLE TYPE DROPDOWN -->
-            <div>
-                <label>Vehicle Type</label>
+    <div class="form-grid">
 
-                <select id="vehicleType">
-                    <option value="">Select Vehicle Type</option>
-                    <option value="TRUCK">TRUCK</option>
-                    <option value="TRACTOR">TRACTOR</option>
-                    <option value="OTHER">OTHER</option>
-                </select>
-            </div>
+        <div>
+            <label>Vehicle Type</label>
 
-            <div>
-                <label>Vehicle Number</label>
-                <input id="vehicleNo" placeholder="RJ 00 XX 0000">
-            </div>
-
-            <div>
-                <label>Party Name</label>
-                <input id="partyName" placeholder="Party Name">
-            </div>
-
-            <div>
-                <label>Mineral</label>
-                <input id="mineral" placeholder="Mineral Name">
-            </div>
-
-            <div>
-                <label>Gross Weight (KG)</label>
-                <input type="number" id="gross" min="0"
-                step="any" placeholder="Gross Weight"
-                oninput="calculateNet()">
-            </div>
-
-            <div>
-                <label>Tare Weight (KG)</label>
-                <input type="number" id="tare" min="0"
-                step="any" placeholder="Tare Weight"
-                oninput="calculateNet()">
-            </div>
-
-            <div>
-                <label>Net Weight (KG)</label>
-                <div class="net-box" id="net">0 KG</div>
-            </div>
-
-            <div>
-                <label>Date</label>
-                <input type="date" id="date">
-            </div>
-
-            <div>
-                <label>Time</label>
-                <input type="time" id="time">
-            </div>
-
+            <select id="vehicleType">
+                <option value="">Select Vehicle Type</option>
+                <option value="TRUCK">TRUCK</option>
+                <option value="TRACTOR">TRACTOR</option>
+                <option value="OTHER">OTHER</option>
+            </select>
         </div>
 
-        <div class="actions">
+        <div>
+            <label>Vehicle Number</label>
+            <input id="vehicleNo"
+            placeholder="RJ 00 XX 0000">
+        </div>
 
-            <button class="print-btn" onclick="printSlip()">
-                🖨️ PRINT SLIP
-            </button>
+        <div>
+            <label>Party Name</label>
+            <input id="partyName"
+            placeholder="Party Name">
+        </div>
 
-            <button class="back-btn" onclick="goDashboard()">
-                ← BACK TO DASHBOARD
-            </button>
+        <div>
+            <label>Mineral</label>
+            <input id="mineral"
+            placeholder="Mineral Name">
+        </div>
 
+        <div>
+            <label>Gross Weight (KG)</label>
+
+            <input type="number"
+            id="gross"
+            min="0"
+            step="any"
+            placeholder="Gross Weight"
+            oninput="calculateNet()">
+        </div>
+
+        <div>
+            <label>Tare Weight (KG)</label>
+
+            <input type="number"
+            id="tare"
+            min="0"
+            step="any"
+            placeholder="Tare Weight"
+            oninput="calculateNet()">
+        </div>
+
+        <div>
+            <label>Net Weight (KG)</label>
+            <div class="net-box" id="net">0 KG</div>
+        </div>
+
+        <div>
+            <label>Date</label>
+            <input type="date" id="date">
+        </div>
+
+        <div>
+            <label>Time</label>
+            <input type="time" id="time">
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <button class="print-btn" onclick="printSlip()">
+            🖨️ PRINT SLIP
+        </button>
+
+        <button class="back-btn" onclick="goDashboard()">
+            ← BACK TO DASHBOARD
+        </button>
+
+    </div>
+
+</div>
+
+<!-- FIRST PRINT SLIP -->
+
+<div class="slip" id="printArea">
+
+    <div class="company">
+        <h1>SAKAR INFRA MINERALS PRIVATE LIMITED</h1>
+        <h3>DHINDHOL, JAIPUR</h3>
+        <p>RAJASTHAN</p>
+    </div>
+
+    <div class="slip-title">
+        WEIGHT SLIP
+    </div>
+
+    <div class="slip-info">
+
+        <div>
+            <b>Vehicle Type:</b>
+            <span id="pVehicleType">-</span>
+        </div>
+
+        <div>
+            <b>Vehicle No.:</b>
+            <span id="pVehicleNo">-</span>
+        </div>
+
+        <div>
+            <b>Party Name:</b>
+            <span id="pParty">-</span>
+        </div>
+
+        <div>
+            <b>Mineral:</b>
+            <span id="pMineral">-</span>
+        </div>
+
+        <div>
+            <b>Date:</b>
+            <span id="pDate">-</span>
+        </div>
+
+        <div>
+            <b>Time:</b>
+            <span id="pTime">-</span>
         </div>
 
     </div>
 
-    <!-- PRINT SLIP -->
+    <table class="weight-table">
 
-    <div class="slip" id="printArea">
+        <thead>
+            <tr>
+                <th>GROSS WEIGHT</th>
+                <th>TARE WEIGHT</th>
+                <th>NET WEIGHT</th>
+            </tr>
+        </thead>
 
-        <div class="company">
-            <h1>SAKAR INFRA MINERALS PRIVATE LIMITED</h1>
-            <h3>DHINDHOL, JAIPUR</h3>
-            <p>RAJASTHAN</p>
-        </div>
+        <tbody>
+            <tr>
+                <td id="pGross">0 KG</td>
+                <td id="pTare">0 KG</td>
+                <td id="pNet">0 KG</td>
+            </tr>
+        </tbody>
 
-        <div class="slip-title">WEIGHT SLIP</div>
+    </table>
 
-        <div class="slip-info">
-
-            <div>
-                <b>Vehicle Type:</b>
-                <span id="pVehicleType">-</span>
-            </div>
-
-            <div>
-                <b>Vehicle No.:</b>
-                <span id="pVehicleNo">-</span>
-            </div>
-
-            <div>
-                <b>Party Name:</b>
-                <span id="pParty">-</span>
-            </div>
-
-            <div>
-                <b>Mineral:</b>
-                <span id="pMineral">-</span>
-            </div>
-
-            <div>
-                <b>Date:</b>
-                <span id="pDate">-</span>
-            </div>
-
-            <div>
-                <b>Time:</b>
-                <span id="pTime">-</span>
-            </div>
-
-        </div>
-
-        <table class="weight-table">
-
-            <thead>
-                <tr>
-                    <th>GROSS WEIGHT</th>
-                    <th>TARE WEIGHT</th>
-                    <th>NET WEIGHT</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td id="pGross">0 KG</td>
-                    <td id="pTare">0 KG</td>
-                    <td id="pNet">0 KG</td>
-                </tr>
-            </tbody>
-
-        </table>
-
-        <div class="thanks">
-            THANKS FOR VISIT
-        </div>
-
-        <div class="signature">
-            <span>Operator Sign</span>
-            <span>Authorized Sign</span>
-        </div>
-
+    <div class="thanks">
+        THANKS FOR VISIT
     </div>
+
+    <div class="signature">
+        <span>Operator Sign</span>
+        <span>Authorized Sign</span>
+    </div>
+
+</div>
 
 </div>
 
@@ -396,119 +422,197 @@ document.getElementById("time").value =
 
 function calculateNet() {
 
-    const gross = parseFloat(
-        document.getElementById("gross").value
-    ) || 0;
+    const gross =
+        parseFloat(document.getElementById("gross").value) || 0;
 
-    const tare = parseFloat(
-        document.getElementById("tare").value
-    ) || 0;
+    const tare =
+        parseFloat(document.getElementById("tare").value) || 0;
 
     const net = gross - tare;
 
     document.getElementById("net").textContent =
         net.toLocaleString("en-IN") + " KG";
+
 }
 
-/* UPDATE SLIP */
+/* GET FORM DATA */
 
-function updateSlip() {
+function getSlipData() {
 
-    const fields = [
-        ["vehicleType", "pVehicleType"],
-        ["vehicleNo", "pVehicleNo"],
-        ["partyName", "pParty"],
-        ["mineral", "pMineral"],
-        ["date", "pDate"],
-        ["time", "pTime"]
-    ];
-
-    fields.forEach(function(pair) {
-
-        const value = document.getElementById(pair[0]).value;
-
-        document.getElementById(pair[1]).textContent =
-            value || "-";
-
-    });
-
-    const gross = parseFloat(
-        document.getElementById("gross").value
-    ) || 0;
-
-    const tare = parseFloat(
-        document.getElementById("tare").value
-    ) || 0;
-
-    const net = gross - tare;
-
-    document.getElementById("pGross").textContent =
-        gross.toLocaleString("en-IN") + " KG";
-
-    document.getElementById("pTare").textContent =
-        tare.toLocaleString("en-IN") + " KG";
-
-    document.getElementById("pNet").textContent =
-        net.toLocaleString("en-IN") + " KG";
-}
-
-/* PRINT SLIP */
-
-function printSlip() {
-
-    const vehicleType =
-        document.getElementById("vehicleType").value;
-
-    const vehicleNo =
-        document.getElementById("vehicleNo").value.trim();
-
-    const grossValue =
-        document.getElementById("gross").value;
-
-    const tareValue =
-        document.getElementById("tare").value;
+    const grossValue = document.getElementById("gross").value;
+    const tareValue = document.getElementById("tare").value;
 
     const gross = parseFloat(grossValue);
     const tare = parseFloat(tareValue);
 
-    if (!vehicleType) {
+    return {
+
+        vehicleType:
+            document.getElementById("vehicleType").value,
+
+        vehicleNo:
+            document.getElementById("vehicleNo").value.trim(),
+
+        partyName:
+            document.getElementById("partyName").value.trim(),
+
+        mineral:
+            document.getElementById("mineral").value.trim(),
+
+        gross: gross,
+        tare: tare,
+        net: gross - tare,
+
+        date:
+            document.getElementById("date").value,
+
+        time:
+            document.getElementById("time").value
+
+    };
+
+}
+
+/* SAVE DATA FOR SECOND SLIP */
+
+function saveSecondSlipData() {
+
+    const data = getSlipData();
+
+    localStorage.setItem(
+        "sakarSecondSlip",
+        JSON.stringify(data)
+    );
+
+}
+
+/* UPDATE FIRST SLIP */
+
+function updateSlip() {
+
+    const data = getSlipData();
+
+    const fields = [
+        ["pVehicleType", data.vehicleType],
+        ["pVehicleNo", data.vehicleNo],
+        ["pParty", data.partyName],
+        ["pMineral", data.mineral],
+        ["pDate", data.date],
+        ["pTime", data.time]
+    ];
+
+    fields.forEach(function(pair) {
+
+        document.getElementById(pair[0]).textContent =
+            pair[1] || "-";
+
+    });
+
+    document.getElementById("pGross").textContent =
+        data.gross.toLocaleString("en-IN") + " KG";
+
+    document.getElementById("pTare").textContent =
+        data.tare.toLocaleString("en-IN") + " KG";
+
+    document.getElementById("pNet").textContent =
+        data.net.toLocaleString("en-IN") + " KG";
+
+}
+
+/* AUTO SAVE WHEN FORM CHANGES */
+
+const formFields = [
+    "vehicleType",
+    "vehicleNo",
+    "partyName",
+    "mineral",
+    "gross",
+    "tare",
+    "date",
+    "time"
+];
+
+formFields.forEach(function(id) {
+
+    const field = document.getElementById(id);
+
+    field.addEventListener("input", saveSecondSlipData);
+    field.addEventListener("change", saveSecondSlipData);
+
+});
+
+/* PRINT FIRST SLIP */
+
+function printSlip() {
+
+    const data = getSlipData();
+
+    if (!data.vehicleType) {
         alert("कृपया Vehicle Type Select करें।");
         return;
     }
 
-    if (!vehicleNo) {
+    if (!data.vehicleNo) {
         alert("कृपया Vehicle Number भरें।");
         return;
     }
 
-    if (grossValue === "" || tareValue === "") {
+    if (!document.getElementById("gross").value ||
+        !document.getElementById("tare").value) {
+
         alert("कृपया Gross और Tare Weight भरें।");
         return;
     }
 
-    if (!Number.isFinite(gross) ||
-        !Number.isFinite(tare) ||
-        gross < 0 || tare < 0) {
+    if (!Number.isFinite(data.gross) ||
+        !Number.isFinite(data.tare) ||
+        data.gross < 0 ||
+        data.tare < 0) {
+
         alert("कृपया सही Weight भरें।");
         return;
     }
 
-    if (gross < tare) {
+    if (data.gross < data.tare) {
         alert("Gross Weight, Tare Weight से कम नहीं हो सकता।");
         return;
     }
 
     updateSlip();
+
+    /* SAVE BEFORE PRINTING */
+
+    try {
+
+        saveSecondSlipData();
+
+        if (!localStorage.getItem("sakarSecondSlip")) {
+            alert("Second Slip Data Save Nahi Hua");
+            return;
+        }
+
+    } catch(error) {
+
+        alert("Data Save Error: " + error.message);
+        return;
+
+    }
+
     window.print();
+
 }
 
 /* BACK TO DASHBOARD */
 
 function goDashboard() {
+
+    saveSecondSlipData();
+
     window.location.href = "dashboard.html";
+
 }
 
-/* INITIAL UPDATE */
+/* INITIAL SETUP */
 
 calculateNet();
 updateSlip();
