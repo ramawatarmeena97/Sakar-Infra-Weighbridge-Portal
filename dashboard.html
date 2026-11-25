@@ -1,257 +1,84 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Sakar Infra Weighbridge Portal</title>
+<title>Sakar Infra Weighbridge Portal - Dashboard</title>
 
 <style>
-* {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,Segoe UI,sans-serif;
+*{margin:0; padding:0; box-sizing:border-box; font-family:Arial,Segoe UI;}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#007bff,#00ffa6);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:30px;
+  color:#222;
 }
 
-body {
-    min-height:100vh;
-    background:linear-gradient(135deg,#007bff,#00ffa6);
-    padding:25px;
-    color:#222;
+.header{
+  text-align:center;
+  margin-bottom:20px;
+  color:white;
+  position:relative;
 }
 
-.wrapper {
-    max-width:1100px;
-    margin:auto;
+.logout-btn{
+  position:absolute;
+  top:0;
+  right:0;
+  padding:8px 15px;
+  background:#e74c3c;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px;
+}
+.logout-btn:hover{ background:#c0392b; }
+
+.wrapper{ max-width:1100px; width:100%; }
+
+.card{
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(10px);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  margin-bottom:25px;
 }
 
-.header {
-    text-align:center;
-    color:white;
-    margin-bottom:20px;
-    position:relative;
+button{
+  padding:12px 22px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:15px;
+  margin:5px;
 }
 
-.logout-btn {
-    position:absolute;
-    right:0;
-    top:0;
-    padding:10px 18px;
-    background:#e74c3c;
-    color:white;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
+.blue{background:#007bff; color:white;}
+.red{background:#ff3b3b; color:white;}
+.green{background:#00c853; color:white;}
+.gray{background:#444; color:white;}
+
+table{width:100%; border-collapse:collapse; margin-top:10px; background:white;}
+th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
+
+#weightDisplay{
+  font-size:28px;
+  font-weight:bold;
+  color:#006400;
+  text-align:center;
+  margin:10px 0;
 }
 
-.card {
-    background:rgba(255,255,255,.18);
-    backdrop-filter:blur(10px);
-    padding:22px;
-    border-radius:18px;
-    margin-bottom:22px;
-    box-shadow:0 8px 25px rgba(0,0,0,.2);
+.footer{
+  text-align:center;
+  color:white;
+  margin-top:10px;
 }
-
-button {
-    border:none;
-    padding:12px 20px;
-    margin:5px;
-    border-radius:7px;
-    cursor:pointer;
-    font-size:14px;
-    font-weight:bold;
-}
-
-.blue {background:#007bff;color:white;}
-.green {background:#00b853;color:white;}
-.red {background:#e53935;color:white;}
-.gray {background:#444;color:white;}
-
-.mines-btn {
-    background:#e67e22;
-    color:white;
-    width:100%;
-    padding:15px;
-    font-size:17px;
-    margin-top:15px;
-}
-
-.form-grid {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-top:20px;
-}
-
-.field label {
-    font-weight:bold;
-    display:block;
-}
-
-.field input {
-    width:100%;
-    padding:12px;
-    border:1px solid #bbb;
-    border-radius:7px;
-    font-size:15px;
-    margin-top:7px;
-}
-
-.net-box {
-    background:#e0ffe8;
-    padding:18px;
-    text-align:center;
-    border-radius:10px;
-    margin-top:18px;
-    color:#006b2c;
-}
-
-.net-box h1 {
-    font-size:32px;
-    margin-top:8px;
-}
-
-.footer {
-    text-align:center;
-    color:white;
-    margin-top:15px;
-}
-
-/* WEIGHT SLIP */
-
-#slip {
-    display:none;
-}
-
-.receipt {
-    background:white;
-    color:black;
-    width:100%;
-    padding:10px;
-    font-family:Arial,sans-serif;
-    font-size:19px;
-}
-
-.company-name {
-    text-align:center;
-    font-size:20px;
-    padding-top:12px;
-}
-
-.company-address {
-    text-align:center;
-    line-height:1.5;
-    font-size:19px;
-}
-
-.dashed {
-    border-top:1px dashed black;
-    margin:15px 0 10px;
-}
-
-.details,
-.weight-details {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    line-height:1.5;
-    gap:5px;
-}
-
-.right {
-    text-align:right;
-}
-
-.thanks {
-    text-align:center;
-    border-top:1px solid black;
-    padding:8px;
-    margin:30px -10px -10px;
-    font-size:19px;
-}
-
-/* MOBILE */
-
-@media(max-width:600px) {
-    body {
-        padding:12px;
-    }
-
-    .header h1 {
-        font-size:22px;
-        padding-top:40px;
-    }
-
-    .form-grid {
-        grid-template-columns:1fr;
-    }
-
-    button {
-        font-size:13px;
-        padding:10px;
-    }
-}
-
-/* A5 LANDSCAPE PRINT */
-
-@page {
-    size:A5 landscape;
-    margin:5mm;
-}
-
-@media print {
-
-    html,body {
-        width:100%;
-        height:auto;
-        margin:0;
-        padding:0;
-        background:white;
-    }
-
-    body * {
-        visibility:hidden;
-    }
-
-    #slip,
-    #slip * {
-        visibility:visible;
-    }
-
-    #slip {
-        display:block !important;
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        margin:0;
-        padding:0;
-    }
-
-    .receipt {
-        width:100%;
-        padding:5px;
-        font-size:18px;
-        color:black;
-        background:white;
-    }
-
-    .company-name {
-        font-size:19px;
-        padding-top:10px;
-    }
-
-    .company-address {
-        font-size:18px;
-    }
-
-    .thanks {
-        font-size:18px;
-    }
-}
-
 </style>
 </head>
 
@@ -259,191 +86,42 @@ button {
 
 <div class="wrapper">
 
-<!-- HEADER -->
-
 <div class="header">
-
 <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
 <p>Dashboard</p>
-
-<button class="logout-btn" onclick="logout()">
-Logout
-</button>
-
+<button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
-<!-- AUDIO PANEL -->
-
 <div class="card">
-
 <h2>🔊 Audio Control Panel</h2>
-
-<button class="green" onclick="playAudio('vajan_sahi')">
-Vajan Sahi Hai
-</button>
-
-<button class="red" onclick="playAudio('galat')">
-Vajan Galat Hai
-</button>
-
-<button class="blue" onclick="playAudio('site_band')">
-Site Nahi Chal Rahi
-</button>
-
+<button class="green" onclick="playAudio('vajan_sahi')">Vajan Sahi Hai</button>
+<button class="red" onclick="playAudio('galat')">Vajan Galat Hai</button>
+<button class="blue" onclick="playAudio('site_band')">Site Nahi Chal Rahi – Gaadi Piche Karein</button>
 <br>
-
 <button class="gray" onclick="pauseAudio()">⏸ Pause</button>
-
 <button class="red" onclick="stopAudio()">⛔ Stop</button>
-
-<button class="green" onclick="playAudio('gadi_aage')">
-🚛 Gaadi Aage Lao
-</button>
-
-<button class="blue" onclick="playAudio('gadi_piche')">
-🚛 Gaadi Piche Lao
-</button>
-
-<p>
-<b>Shortcuts:</b>
-01=Sahi | 02=Galat | 03=Site Band | 00=Stop
-</p>
-
+<button class="green" onclick="playAudio('gadi_aage')">🚛 Gaadi Aage Lao</button>
+<button class="blue" onclick="playAudio('gadi_piche')">🚛 Gaadi Piche Lao</button>
+<p><b>Keyboard Shortcuts:</b> 1=Sahi • 2=Galat • 3=Site Band • 0=Stop</p>
 </div>
-
-<!-- MANUAL WEIGHT SLIP -->
 
 <div class="card">
+<h2>⚖ Weight Software</h2>
+<div id="weightDisplay">Weight: 0 kg</div>
+<input type="range" min="0" max="150" value="0" id="weightSlider" style="width:100%;">
+<button class="blue" id="addRecordBtn">Add Record</button>
+<button class="green" id="printSlipBtn">Print Weight Slip</button>
 
-<h2>⚖ Manual Weight Slip Software</h2>
-
-<div class="form-grid">
-
-<div class="field">
-<label>Vehicle Type</label>
-<input type="text" id="vehicleType" placeholder="Dumper">
-</div>
-
-<div class="field">
-<label>Vehicle Number</label>
-<input type="text" id="vehicle" placeholder="RJ14GL2275">
-</div>
-
-<div class="field">
-<label>Party Name</label>
-<input type="text" id="party" placeholder="Enter Party Name">
-</div>
-
-<div class="field">
-<label>Mineral Name</label>
-<input type="text" id="material" placeholder="DUST">
-</div>
-
-<div class="field">
-<label>Date</label>
-<input type="date" id="date">
-</div>
-
-<div class="field">
-<label>Time</label>
-<input type="time" id="time">
-</div>
-
-<div class="field">
-<label>Gross Weight (KG)</label>
-<input type="number" id="gross" placeholder="Enter Gross Weight" min="0" step="any">
-</div>
-
-<div class="field">
-<label>Tare Weight (KG)</label>
-<input type="number" id="tare" placeholder="Enter Tare Weight" min="0" step="any">
-</div>
-
-</div>
-
-<!-- NET WEIGHT -->
-
-<div class="net-box">
-<h3>NET WEIGHT</h3>
-<h1 id="netWeight">0 KG</h1>
-<p>Gross Weight - Tare Weight</p>
-</div>
-
-<br>
-
-<button class="blue" onclick="generateSlip()">
-📄 Generate Weight Slip
-</button>
-
-<button class="green" onclick="printSlip()">
-🖨 Print Weight Slip
-</button>
-
-<button class="red" onclick="clearForm()">
-Clear Form
-</button>
-
-<button class="mines-btn" onclick="openMinesPortal()">
-⛏ Rajasthan Mines Portal खोलें
-</button>
-
-</div>
-
-<!-- PRINTABLE SLIP -->
-
-<div id="slip">
-
-<div class="receipt">
-
-<div class="company-name">
-SAKAR INFRA MINERALS PRIVATE LIMITED
-</div>
-
-<div class="company-address">
-DHINDHOL, JAIPUR<br>
-RAJASTHAN
-</div>
-
-<div class="dashed"></div>
-
-<div class="details">
-
-<div>
-Vehicle type : <span id="sVehicleType"></span><br>
-Vehicle No. : <span id="sVehicle"></span>
-</div>
-
-<div class="right">
-Party Name: <span id="sParty"></span><br>
-Mineral : <span id="sMaterial"></span>
-</div>
-
-</div>
-
-<div class="dashed"></div>
-
-<div class="weight-details">
-
-<div>
-Gross Weight : <span id="sGross"></span> KG<br>
-Tare Weight : <span id="sTare"></span> KG<br>
-Net Weight : <span id="sNet"></span> KG
-</div>
-
-<div class="right">
-Date : <span id="sDate"></span><br>
-Time : <span id="sTime"></span>
-</div>
-
-</div>
-
-<div class="dashed"></div>
-
-<div class="thanks">
-Thanks For Visit
-</div>
-
-</div>
+<table id="recordTable">
+<thead>
+<tr>
+<th>S.No</th>
+<th>Date & Time</th>
+<th>Weight (kg)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
 
 <div class="footer">
@@ -452,8 +130,6 @@ Thanks For Visit
 
 </div>
 
-<!-- AUDIO FILES -->
-
 <audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
 <audio id="galat" src="galat.mp3.mp3"></audio>
 <audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
@@ -461,212 +137,53 @@ Thanks For Visit
 <audio id="gadi_piche" src="backward.wav"></audio>
 
 <script>
-
-/* LOGIN CHECK */
-
+/* ===== LOGIN CHECK ===== */
 if(!localStorage.getItem("loggedIn")){
     window.location.href="index.html";
 }
 
-/* LOGOUT */
-
+/* ===== LOGOUT ===== */
 function logout(){
     localStorage.removeItem("loggedIn");
     window.location.href="index.html";
 }
 
-/* MINES PORTAL */
-
-function openMinesPortal(){
-    window.open(
-    "https://minesportal.rajasthan.gov.in/#/unconfirmed-erawanna/generate-rawanna#part2",
-    "_blank"
-    );
-}
-
-/* AUDIO CONTROL */
-
+/* ===== AUDIO CONTROL ===== */
 let currentAudio=null;
-
 function playAudio(id){
-
-    if(currentAudio){
-        currentAudio.pause();
-        currentAudio.currentTime=0;
-    }
-
-    currentAudio=document.getElementById(id);
-
-    currentAudio.play().catch(function(){
-        alert("Audio file not found or cannot be played.");
-    });
+ if(currentAudio){currentAudio.pause(); currentAudio.currentTime=0;}
+ currentAudio=document.getElementById(id);
+ currentAudio.play();
 }
-
-function pauseAudio(){
-    if(currentAudio) currentAudio.pause();
-}
-
-function stopAudio(){
-    if(currentAudio){
-        currentAudio.pause();
-        currentAudio.currentTime=0;
-    }
-}
+function pauseAudio(){ if(currentAudio){currentAudio.pause();} }
+function stopAudio(){ if(currentAudio){currentAudio.pause(); currentAudio.currentTime=0;} }
 
 document.addEventListener("keydown",function(e){
-
-    if(e.key=="1") playAudio("vajan_sahi");
-    if(e.key=="2") playAudio("galat");
-    if(e.key=="3") playAudio("site_band");
-    if(e.key=="0") stopAudio();
-
+ if(e.key=="1") playAudio("vajan_sahi");
+ if(e.key=="2") playAudio("galat");
+ if(e.key=="3") playAudio("site_band");
+ if(e.key=="0") stopAudio();
 });
 
-/* DATE AND TIME */
+/* ===== WEIGHT SOFTWARE ===== */
+const slider=document.getElementById("weightSlider");
+const display=document.getElementById("weightDisplay");
+const addBtn=document.getElementById("addRecordBtn");
+const tableBody=document.querySelector("#recordTable tbody");
+let serial=1;
 
-function setCurrentDateTime(){
+slider.addEventListener("input",()=>{ display.textContent=`Weight: ${slider.value} kg`; });
 
-    let now=new Date();
+addBtn.addEventListener("click",()=>{
+ let row=document.createElement("tr");
+ let now=new Date().toLocaleString();
+ row.innerHTML=`<td>${serial++}</td><td>${now}</td><td>${slider.value}</td>`;
+ tableBody.appendChild(row);
+ alert("Record Added Successfully");
+});
 
-    let date=now.getFullYear()+"-"+
-    String(now.getMonth()+1).padStart(2,"0")+"-"+
-    String(now.getDate()).padStart(2,"0");
-
-    let time=String(now.getHours()).padStart(2,"0")+":"+
-    String(now.getMinutes()).padStart(2,"0");
-
-    document.getElementById("date").value=date;
-    document.getElementById("time").value=time;
-}
-
-setCurrentDateTime();
-
-/* AUTO NET WEIGHT */
-
-const gross=document.getElementById("gross");
-const tare=document.getElementById("tare");
-const netWeight=document.getElementById("netWeight");
-
-function calculateNet(){
-
-    let g=parseFloat(gross.value);
-    let t=parseFloat(tare.value);
-
-    if(gross.value==="" || tare.value===""){
-        netWeight.textContent="0 KG";
-        return;
-    }
-
-    if(!Number.isFinite(g) || !Number.isFinite(t)){
-        netWeight.textContent="Invalid Weight";
-        return;
-    }
-
-    let net=g-t;
-
-    netWeight.textContent=
-    net.toLocaleString("en-IN")+" KG";
-}
-
-gross.addEventListener("input",calculateNet);
-tare.addEventListener("input",calculateNet);
-
-/* GENERATE SLIP */
-
-let slipGenerated=false;
-
-function generateSlip(){
-
-    let vehicleType=document.getElementById("vehicleType").value.trim();
-    let vehicle=document.getElementById("vehicle").value.trim();
-    let party=document.getElementById("party").value.trim();
-    let material=document.getElementById("material").value.trim();
-
-    let date=document.getElementById("date").value;
-    let time=document.getElementById("time").value;
-
-    let g=parseFloat(gross.value);
-    let t=parseFloat(tare.value);
-
-    if(!vehicleType || !vehicle || !party ||
-       !material || !date || !time){
-
-        alert("Please fill all details.");
-        return;
-    }
-
-    if(gross.value==="" || tare.value==="" ||
-       !Number.isFinite(g) || !Number.isFinite(t) ||
-       g<0 || t<0){
-
-        alert("Please enter valid Gross and Tare Weight.");
-        return;
-    }
-
-    if(t>g){
-        alert("Tare Weight cannot be greater than Gross Weight.");
-        return;
-    }
-
-    let net=g-t;
-
-    document.getElementById("sVehicleType").textContent=vehicleType;
-    document.getElementById("sVehicle").textContent=vehicle;
-    document.getElementById("sParty").textContent=party;
-    document.getElementById("sMaterial").textContent=material;
-
-    document.getElementById("sDate").textContent=
-    date.split("-").reverse().join("/");
-
-    document.getElementById("sTime").textContent=time;
-
-    document.getElementById("sGross").textContent=
-    g.toLocaleString("en-IN");
-
-    document.getElementById("sTare").textContent=
-    t.toLocaleString("en-IN");
-
-    document.getElementById("sNet").textContent=
-    net.toLocaleString("en-IN");
-
-    slipGenerated=true;
-
-    alert("Weight Slip Generated Successfully!");
-}
-
-/* PRINT SLIP */
-
-function printSlip(){
-
-    if(!slipGenerated){
-        alert("Please Generate Weight Slip First.");
-        return;
-    }
-
-    window.print();
-}
-
-/* CLEAR FORM */
-
-function clearForm(){
-
-    document.getElementById("vehicleType").value="";
-    document.getElementById("vehicle").value="";
-    document.getElementById("party").value="";
-    document.getElementById("material").value="";
-
-    gross.value="";
-    tare.value="";
-
-    calculateNet();
-
-    slipGenerated=false;
-
-    setCurrentDateTime();
-}
-
+document.getElementById("printSlipBtn").addEventListener("click",()=>{ window.print(); });
 </script>
 
 </body>
 </html>
-```
