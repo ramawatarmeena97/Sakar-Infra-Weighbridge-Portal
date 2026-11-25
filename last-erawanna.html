@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sakar Infra - Last E-Rawanna Check</title>
+
+<style>
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body {
+    min-height:100vh;
+    background:linear-gradient(135deg,#007bff,#00ffa6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container {
+    background:white;
+    width:100%;
+    max-width:550px;
+    padding:35px;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    text-align:center;
+}
+
+h1 {
+    color:#007bff;
+    margin-bottom:10px;
+    font-size:27px;
+}
+
+.subtitle {
+    color:#666;
+    margin-bottom:30px;
+}
+
+label {
+    display:block;
+    text-align:left;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+input {
+    width:100%;
+    padding:15px;
+    border:2px solid #ddd;
+    border-radius:8px;
+    font-size:18px;
+    text-transform:uppercase;
+    outline:none;
+    margin-bottom:20px;
+}
+
+input:focus {
+    border-color:#007bff;
+}
+
+button {
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:12px;
+}
+
+.search {
+    background:#007bff;
+    color:white;
+}
+
+.back {
+    background:#444;
+    color:white;
+}
+
+.info {
+    background:#eaf5ff;
+    padding:15px;
+    border-radius:8px;
+    margin-top:15px;
+    font-size:13px;
+    color:#444;
+    line-height:1.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚛 SAKAR INFRA</h1>
+
+    <h2>LAST E-RAWANNA CHECK</h2>
+
+    <p class="subtitle">
+        Rajasthan Mines & Geology Department
+    </p>
+
+    <form id="searchForm">
+
+        <label>Enter Vehicle Number</label>
+
+        <input
+            type="text"
+            id="vehicleNo"
+            placeholder="Example: RJ14GL2275"
+            maxlength="20"
+            required
+        >
+
+        <button type="submit" class="search">
+            🔍 CHECK E-RAWANNA
+        </button>
+
+    </form>
+
+    <button class="back" onclick="goBack()">
+        ⬅ BACK TO DASHBOARD
+    </button>
+
+    <div class="info">
+        <b>Instructions:</b><br>
+        Enter the correct vehicle number.<br>
+        The official RajMines website will open
+        with the available E-Rawanna record.
+        <br><br>
+        Use the browser Print option on the official
+        result page to print the slip.
+    </div>
+
+</div>
+
+<script>
+
+if(!localStorage.getItem("loggedIn")) {
+    window.location.href="index.html";
+}
+
+document.getElementById("searchForm").addEventListener("submit",function(e) {
+
+    e.preventDefault();
+
+    let vehicle = document.getElementById("vehicleNo").value
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g,'');
+
+    if(!vehicle) {
+        alert("Please Enter Vehicle Number");
+        return;
+    }
+
+    if(!/^[a-z0-9-]+$/.test(vehicle)) {
+        alert("Please Enter a Valid Vehicle Number");
+        return;
+    }
+
+    let url = "https://mines.rajasthan.gov.in/DMG2/Public/eRawannaStatus/"
+              + encodeURIComponent(vehicle);
+
+    window.open(url,"_blank");
+
+});
+
+function goBack() {
+    window.location.href="dashboard.html";
+}
+
+</script>
+
+</body>
+</html>
