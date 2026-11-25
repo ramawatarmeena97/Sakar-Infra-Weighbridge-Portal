@@ -1,0 +1,137 @@
+```html
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakar Infra - Dashboard</title>
+
+<style>
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+    color: #172033;
+}
+header {
+    background: #142b4a;
+    color: white;
+    padding: 18px;
+    text-align: center;
+}
+header h2 { margin: 0; }
+.container {
+    max-width: 850px;
+    margin: 25px auto;
+    padding: 15px;
+}
+.panel {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #0002;
+}
+h3 { margin-top: 0; color: #142b4a; }
+.audio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+    gap: 12px;
+}
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 14px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+.audio-btn { background: #1769aa; }
+.stop-btn { background: #c62828; }
+.slip-btn {
+    background: #16834a;
+    width: 100%;
+    margin-top: 20px;
+    font-weight: bold;
+}
+.logout-btn {
+    background: #c62828;
+    margin-top: 15px;
+}
+button:hover { opacity: .88; }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>SAKAR INFRA MINERALS PRIVATE LIMITED</h2>
+    <p>WEIGHBRIDGE DASHBOARD</p>
+</header>
+
+<div class="container">
+
+    <div class="panel">
+        <h3>🔊 Audio Control Panel</h3>
+
+        <div class="audio-grid">
+            <button class="audio-btn" onclick="playAudio('vajan_sahi')">
+                1 - वजन सही
+            </button>
+
+            <button class="audio-btn" onclick="playAudio('galat')">
+                2 - वजन गलत
+            </button>
+
+            <button class="audio-btn" onclick="playAudio('site_band')">
+                3 - साइट बंद
+            </button>
+
+            <button class="audio-btn" onclick="playAudio('gadi_aage')">
+                गाड़ी आगे
+            </button>
+
+            <button class="audio-btn" onclick="playAudio('gadi_piche')">
+                गाड़ी पीछे
+            </button>
+
+            <button class="stop-btn" onclick="stopAudio()">
+                0 - STOP AUDIO
+            </button>
+        </div>
+
+        <audio id="audioPlayer"></audio>
+
+        <button class="slip-btn"
+        onclick="window.location.href='weight-slip.html'">
+            📄 MANUAL WEIGHT SLIP OPEN
+        </button>
+
+        <button class="logout-btn" onclick="logout()">
+            LOGOUT
+        </button>
+    </div>
+
+</div>
+
+<script>
+if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "index.html";
+}
+
+const audioFiles = {
+    vajan_sahi: "vajan_sahi_age.mp3.mpeg",
+    galat: "galat.mp3.mp3",
+    site_band: "site_nahi_chal_rhi.mp3",
+    gadi_aage: "forward.wav",
+    gadi_piche: "backward.wav"
+};
+
+const player = document.getElementById("audioPlayer");
+
+function playAudio(name) {
+    player.pause();
+    player.src = audioFiles[name];
+    player.currentTime = 0;
+    player.play().catch(error => {
+        alert("Audio file नहीं चल पाई। File का नाम और location
