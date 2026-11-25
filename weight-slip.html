@@ -1,0 +1,414 @@
+```html
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Weight Slip - Sakar Infra</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #eef2f7;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+}
+
+.form-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #0002;
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #142b4a;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.net-box {
+    background: #e7f5e9;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #146c32;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+button {
+    border: 0;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.print-btn { background: #16834a; }
+.back-btn { background: #1769aa; }
+
+/* Slip Design */
+.slip {
+    background: white;
+    border: 2px solid black;
+    padding: 18px;
+    color: black;
+}
+
+.company {
+    text-align: center;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+}
+
+.company h1 {
+    font-size: 23px;
+    margin: 4px 0;
+}
+
+.company h3 {
+    margin: 5px 0;
+    font-size: 17px;
+}
+
+.company p {
+    margin: 4px 0;
+    font-weight: bold;
+}
+
+.slip-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 19px;
+    margin: 12px 0;
+    text-decoration: underline;
+}
+
+.slip-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    font-size: 15px;
+    margin: 12px 0;
+}
+
+.slip-info div {
+    padding: 7px;
+    border-bottom: 1px dotted black;
+}
+
+.weight-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.weight-table th,
+.weight-table td {
+    border: 1px solid black;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.weight-table th {
+    background: #eee;
+}
+
+.thanks {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 17px;
+}
+
+.signature {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+}
+
+@page {
+    size: A5 landscape;
+    margin: 5mm;
+}
+
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .form-panel,
+    .no-print {
+        display: none !important;
+    }
+
+    .container {
+        max-width: none;
+        margin: 0;
+    }
+
+    .slip {
+        width: 100%;
+        border: 2px solid black;
+        padding: 10px;
+    }
+
+    .company h1 { font-size: 21px; }
+    .slip-info { font-size: 13px; }
+    .weight-table th,
+    .weight-table td {
+        padding: 9px 6px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="form-panel">
+        <h2>MANUAL WEIGHT SLIP</h2>
+
+        <div class="form-grid">
+
+            <div>
+                <label>Vehicle Type</label>
+                <input id="vehicleType" placeholder="Truck / Tractor">
+            </div>
+
+            <div>
+                <label>Vehicle Number</label>
+                <input id="vehicleNo" placeholder="RJ 00 XX 0000">
+            </div>
+
+            <div>
+                <label>Party Name</label>
+                <input id="partyName" placeholder="Party Name">
+            </div>
+
+            <div>
+                <label>Mineral</label>
+                <input id="mineral" placeholder="Mineral Name">
+            </div>
+
+            <div>
+                <label>Gross Weight (KG)</label>
+                <input type="number" id="gross" min="0" step="any"
+                placeholder="Gross Weight" oninput="calculateNet()">
+            </div>
+
+            <div>
+                <label>Tare Weight (KG)</label>
+                <input type="number" id="tare" min="0" step="any"
+                placeholder="Tare Weight" oninput="calculateNet()">
+            </div>
+
+            <div>
+                <label>Net Weight (KG)</label>
+                <div class="net-box" id="net">0 KG</div>
+            </div>
+
+            <div>
+                <label>Date</label>
+                <input type="date" id="date">
+            </div>
+
+            <div>
+                <label>Time</label>
+                <input type="time" id="time">
+            </div>
+
+        </div>
+
+        <div class="actions">
+            <button class="print-btn" onclick="printSlip()">
+                🖨️ PRINT SLIP
+            </button>
+
+            <button class="back-btn" onclick="goDashboard()">
+                ← BACK TO DASHBOARD
+            </button>
+        </div>
+    </div>
+
+    <!-- PRINT SLIP -->
+
+    <div class="slip" id="printArea">
+
+        <div class="company">
+            <h1>SAKAR INFRA MINERALS PRIVATE LIMITED</h1>
+            <h3>DHINDHOL, JAIPUR</h3>
+            <p>RAJASTHAN</p>
+        </div>
+
+        <div class="slip-title">WEIGHT SLIP</div>
+
+        <div class="slip-info">
+            <div><b>Vehicle Type:</b> <span id="pVehicleType">-</span></div>
+            <div><b>Vehicle No.:</b> <span id="pVehicleNo">-</span></div>
+            <div><b>Party Name:</b> <span id="pParty">-</span></div>
+            <div><b>Mineral:</b> <span id="pMineral">-</span></div>
+            <div><b>Date:</b> <span id="pDate">-</span></div>
+            <div><b>Time:</b> <span id="pTime">-</span></div>
+        </div>
+
+        <table class="weight-table">
+            <thead>
+                <tr>
+                    <th>GROSS WEIGHT</th>
+                    <th>TARE WEIGHT</th>
+                    <th>NET WEIGHT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="pGross">0 KG</td>
+                    <td id="pTare">0 KG</td>
+                    <td id="pNet">0 KG</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="thanks">THANKS FOR VISIT</div>
+
+        <div class="signature">
+            <span>Operator Sign</span>
+            <span>Authorized Sign</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "index.html";
+}
+
+const today = new Date();
+
+document.getElementById("date").value =
+    today.getFullYear() + "-" +
+    String(today.getMonth() + 1).padStart(2, "0") + "-" +
+    String(today.getDate()).padStart(2, "0");
+
+document.getElementById("time").value =
+    String(today.getHours()).padStart(2, "0") + ":" +
+    String(today.getMinutes()).padStart(2, "0");
+
+function calculateNet() {
+    const gross = parseFloat(document.getElementById("gross").value) || 0;
+    const tare = parseFloat(document.getElementById("tare").value) || 0;
+
+    const net = gross - tare;
+
+    document.getElementById("net").textContent =
+        net.toLocaleString("en-IN") + " KG";
+}
+
+function updateSlip() {
+    const fields = [
+        ["vehicleType", "pVehicleType"],
+        ["vehicleNo", "pVehicleNo"],
+        ["partyName", "pParty"],
+        ["mineral", "pMineral"],
+        ["date", "pDate"],
+        ["time", "pTime"]
+    ];
+
+    fields.forEach(function(pair) {
+        const value = document.getElementById(pair[0]).value;
+        document.getElementById(pair[1]).textContent = value || "-";
+    });
+
+    const gross = parseFloat(document.getElementById("gross").value) || 0;
+    const tare = parseFloat(document.getElementById("tare").value) || 0;
+    const net = gross - tare;
+
+    document.getElementById("pGross").textContent =
+        gross.toLocaleString("en-IN") + " KG";
+
+    document.getElementById("pTare").textContent =
+        tare.toLocaleString("en-IN") + " KG";
+
+    document.getElementById("pNet").textContent =
+        net.toLocaleString("en-IN") + " KG";
+}
+
+function printSlip() {
+    const gross = parseFloat(document.getElementById("gross").value);
+    const tare = parseFloat(document.getElementById("tare").value);
+
+    if (!document.getElementById("vehicleNo").value.trim()) {
+        alert("कृपया Vehicle Number भरें।");
+        return;
+    }
+
+    if (!document.getElementById("gross").value ||
+        !document.getElementById("tare").value) {
+        alert("कृपया Gross और Tare Weight भरें।");
+        return;
+    }
+
+    if (gross < tare) {
+        alert("Gross Weight, Tare Weight से कम नहीं हो सकता।");
+        return;
+    }
+
+    updateSlip();
+    window.print();
+}
+
+function goDashboard() {
+    window.location.href = "dashboard.html";
+}
+
+updateSlip();
+</script>
+
+</body>
+</html>
+```
