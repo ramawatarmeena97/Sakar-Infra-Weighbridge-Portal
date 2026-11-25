@@ -1,83 +1,132 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sakar Infra Weighbridge Portal - Dashboard</title>
 
 <style>
-*{margin:0; padding:0; box-sizing:border-box; font-family:Arial,Segoe UI;}
-
-body{
-  min-height:100vh;
-  background:linear-gradient(135deg,#007bff,#00ffa6);
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:30px;
-  color:#222;
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Segoe UI;
 }
 
-.header{
-  text-align:center;
-  margin-bottom:20px;
-  color:white;
-  position:relative;
+body {
+    min-height:100vh;
+    background:linear-gradient(135deg,#007bff,#00ffa6);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:30px;
+    color:#222;
 }
 
-.logout-btn{
-  position:absolute;
-  top:0;
-  right:0;
-  padding:8px 15px;
-  background:#e74c3c;
-  color:white;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:14px;
-}
-.logout-btn:hover{ background:#c0392b; }
-
-.wrapper{ max-width:1100px; width:100%; }
-
-.card{
-  background:rgba(255,255,255,0.15);
-  backdrop-filter:blur(10px);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.25);
-  margin-bottom:25px;
+.header {
+    text-align:center;
+    margin-bottom:20px;
+    color:white;
+    position:relative;
 }
 
-button{
-  padding:12px 22px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:15px;
-  margin:5px;
+.logout-btn {
+    position:absolute;
+    top:0;
+    right:0;
+    padding:8px 15px;
+    background:#e74c3c;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
 }
 
-.blue{background:#007bff; color:white;}
-.red{background:#ff3b3b; color:white;}
-.green{background:#00c853; color:white;}
-.gray{background:#444; color:white;}
-
-table{width:100%; border-collapse:collapse; margin-top:10px; background:white;}
-th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
-
-#weightDisplay{
-  font-size:28px;
-  font-weight:bold;
-  color:#006400;
-  text-align:center;
-  margin:10px 0;
+.logout-btn:hover {
+    background:#c0392b;
 }
 
-.footer{
-  text-align:center;
-  color:white;
-  margin-top:10px;
+.wrapper {
+    max-width:1100px;
+    width:100%;
+}
+
+.card {
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    margin-bottom:25px;
+}
+
+button {
+    padding:12px 22px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    margin:5px;
+}
+
+button:hover {
+    opacity:0.85;
+    transform:translateY(-2px);
+}
+
+.blue {background:#007bff;color:white;}
+.red {background:#ff3b3b;color:white;}
+.green {background:#00c853;color:white;}
+.gray {background:#444;color:white;}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    background:white;
+}
+
+th,td {
+    padding:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+#weightDisplay {
+    font-size:28px;
+    font-weight:bold;
+    color:#006400;
+    text-align:center;
+    margin:10px 0;
+}
+
+.footer {
+    text-align:center;
+    color:white;
+    margin-top:10px;
+}
+
+/* SLIP BUTTON PANEL */
+.slip-panel {
+    text-align:center;
+}
+
+.slip-panel button {
+    min-width:220px;
+    padding:15px 25px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+@media(max-width:600px) {
+    body {padding:12px;}
+    .header h1 {font-size:22px;padding-top:35px;}
+    button {width:100%;margin:5px 0;}
+    .logout-btn {top:0;right:0;}
+    table {font-size:12px;}
+    th,td {padding:5px;}
 }
 </style>
 </head>
@@ -86,50 +135,108 @@ th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
 
 <div class="wrapper">
 
+<!-- HEADER -->
 <div class="header">
-<h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
-<p>Dashboard</p>
-<button class="logout-btn" onclick="logout()">Logout</button>
+    <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
+    <p>Dashboard</p>
+    <button class="logout-btn" onclick="logout()">Logout</button>
 </div>
 
+<!-- AUDIO PANEL -->
 <div class="card">
-<h2>🔊 Audio Control Panel</h2>
-<button class="green" onclick="playAudio('vajan_sahi')">Vajan Sahi Hai</button>
-<button class="red" onclick="playAudio('galat')">Vajan Galat Hai</button>
-<button class="blue" onclick="playAudio('site_band')">Site Nahi Chal Rahi – Gaadi Piche Karein</button>
-<br>
-<button class="gray" onclick="pauseAudio()">⏸ Pause</button>
-<button class="red" onclick="stopAudio()">⛔ Stop</button>
-<button class="green" onclick="playAudio('gadi_aage')">🚛 Gaadi Aage Lao</button>
-<button class="blue" onclick="playAudio('gadi_piche')">🚛 Gaadi Piche Lao</button>
-<p><b>Keyboard Shortcuts:</b> 1=Sahi • 2=Galat • 3=Site Band • 0=Stop</p>
+
+    <h2>🔊 Audio Control Panel</h2>
+
+    <button class="green" onclick="playAudio('vajan_sahi')">
+        Vajan Sahi Hai
+    </button>
+
+    <button class="red" onclick="playAudio('galat')">
+        Vajan Galat Hai
+    </button>
+
+    <button class="blue" onclick="playAudio('site_band')">
+        Site Nahi Chal Rahi – Gaadi Piche Karein
+    </button>
+
+    <br>
+
+    <button class="gray" onclick="pauseAudio()">⏸ Pause</button>
+    <button class="red" onclick="stopAudio()">⛔ Stop</button>
+
+    <button class="green" onclick="playAudio('gadi_aage')">
+        🚛 Gaadi Aage Lao
+    </button>
+
+    <button class="blue" onclick="playAudio('gadi_piche')">
+        🚛 Gaadi Piche Lao
+    </button>
+
+    <p><b>Keyboard Shortcuts:</b>
+    1=Sahi • 2=Galat • 3=Site Band • 0=Stop</p>
+
 </div>
 
+<!-- WEIGHT SOFTWARE -->
 <div class="card">
-<h2>⚖ Weight Software</h2>
-<div id="weightDisplay">Weight: 0 kg</div>
-<input type="range" min="0" max="150" value="0" id="weightSlider" style="width:100%;">
-<button class="blue" id="addRecordBtn">Add Record</button>
-<button class="green" id="printSlipBtn">Print Weight Slip</button>
 
-<table id="recordTable">
-<thead>
-<tr>
-<th>S.No</th>
-<th>Date & Time</th>
-<th>Weight (kg)</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
+    <h2>⚖ Weight Software</h2>
+
+    <div id="weightDisplay">Weight: 0 kg</div>
+
+    <input type="range" min="0" max="150"
+    value="0" id="weightSlider" style="width:100%;">
+
+    <button class="blue" id="addRecordBtn">
+        Add Record
+    </button>
+
+    <button class="green" id="printSlipBtn">
+        Print Weight Slip
+    </button>
+
+    <table id="recordTable">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Date & Time</th>
+                <th>Weight (kg)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
 </div>
 
+<!-- NEW SLIP BUTTON PANEL -->
+<div class="card slip-panel">
+
+    <h2>📄 Weight Slip Management</h2>
+
+    <p style="margin:12px 0;">
+        Select the page you want to open
+    </p>
+
+    <button class="blue"
+    onclick="window.location.href='weight-slip.html'">
+        ⚖ WEIGHT SLIP
+    </button>
+
+    <button class="green"
+    onclick="window.location.href='weight-slip.html'">
+        📋 SECOND SLIP
+    </button>
+
+</div>
+
+<!-- FOOTER -->
 <div class="footer">
-© 2026 Sakar Infra | All Rights Reserved
+    © 2026 Sakar Infra | All Rights Reserved
 </div>
 
 </div>
 
+<!-- AUDIO FILES -->
 <audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
 <audio id="galat" src="galat.mp3.mp3"></audio>
 <audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
@@ -137,52 +244,91 @@ th,td{padding:8px; border:1px solid #ccc; font-size:14px;}
 <audio id="gadi_piche" src="backward.wav"></audio>
 
 <script>
-/* ===== LOGIN CHECK ===== */
-if(!localStorage.getItem("loggedIn")){
+
+/* LOGIN CHECK */
+if(!localStorage.getItem("loggedIn")) {
     window.location.href="index.html";
 }
 
-/* ===== LOGOUT ===== */
-function logout(){
+/* LOGOUT */
+function logout() {
     localStorage.removeItem("loggedIn");
     window.location.href="index.html";
 }
 
-/* ===== AUDIO CONTROL ===== */
+/* AUDIO CONTROL */
 let currentAudio=null;
-function playAudio(id){
- if(currentAudio){currentAudio.pause(); currentAudio.currentTime=0;}
- currentAudio=document.getElementById(id);
- currentAudio.play();
-}
-function pauseAudio(){ if(currentAudio){currentAudio.pause();} }
-function stopAudio(){ if(currentAudio){currentAudio.pause(); currentAudio.currentTime=0;} }
 
-document.addEventListener("keydown",function(e){
- if(e.key=="1") playAudio("vajan_sahi");
- if(e.key=="2") playAudio("galat");
- if(e.key=="3") playAudio("site_band");
- if(e.key=="0") stopAudio();
+function playAudio(id) {
+    if(currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime=0;
+    }
+
+    currentAudio=document.getElementById(id);
+    currentAudio.play();
+}
+
+function pauseAudio() {
+    if(currentAudio) {
+        currentAudio.pause();
+    }
+}
+
+function stopAudio() {
+    if(currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime=0;
+    }
+}
+
+/* KEYBOARD SHORTCUTS */
+document.addEventListener("keydown",function(e) {
+
+    if(e.key=="1") playAudio("vajan_sahi");
+    if(e.key=="2") playAudio("galat");
+    if(e.key=="3") playAudio("site_band");
+    if(e.key=="0") stopAudio();
+
 });
 
-/* ===== WEIGHT SOFTWARE ===== */
+/* WEIGHT SOFTWARE */
 const slider=document.getElementById("weightSlider");
 const display=document.getElementById("weightDisplay");
 const addBtn=document.getElementById("addRecordBtn");
 const tableBody=document.querySelector("#recordTable tbody");
+
 let serial=1;
 
-slider.addEventListener("input",()=>{ display.textContent=`Weight: ${slider.value} kg`; });
-
-addBtn.addEventListener("click",()=>{
- let row=document.createElement("tr");
- let now=new Date().toLocaleString();
- row.innerHTML=`<td>${serial++}</td><td>${now}</td><td>${slider.value}</td>`;
- tableBody.appendChild(row);
- alert("Record Added Successfully");
+slider.addEventListener("input",()=> {
+    display.textContent=`Weight: ${slider.value} kg`;
 });
 
-document.getElementById("printSlipBtn").addEventListener("click",()=>{ window.print(); });
+addBtn.addEventListener("click",()=> {
+
+    let row=document.createElement("tr");
+    let now=new Date().toLocaleString();
+
+    let td1=document.createElement("td");
+    let td2=document.createElement("td");
+    let td3=document.createElement("td");
+
+    td1.textContent=serial++;
+    td2.textContent=now;
+    td3.textContent=slider.value;
+
+    row.append(td1,td2,td3);
+    tableBody.appendChild(row);
+
+    alert("Record Added Successfully");
+
+});
+
+/* PRINT */
+document.getElementById("printSlipBtn").addEventListener("click",()=> {
+    window.print();
+});
+
 </script>
 
 </body>
