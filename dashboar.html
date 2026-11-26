@@ -331,6 +331,8 @@ button:hover {
 
 <script>
 
+/* LOGIN SYSTEM */
+
 if(!localStorage.getItem("loggedIn")) {
     window.location.href="index.html";
 }
@@ -342,23 +344,38 @@ function logout() {
 
 /* CAMERA SETTINGS */
 
-const CAMERA_BASE =
-"http://192.168.0.217:1984/stream.html?src=";
+const CAMERA_URLS = {
+
+    KASHYAP:
+    "http://192.168.0.217:1984/stream.html?src=KASHYAP%20",
+
+    Ramawatar:
+    "http://192.168.0.217:1984/stream.html?src=Ramawatar"
+
+};
 
 let selectedCamera = "KASHYAP";
 
+/* SELECT CAMERA */
+
 function selectCamera(cameraName) {
+
+    if(!CAMERA_URLS[cameraName]) return;
 
     selectedCamera = cameraName;
 
-    const frame = document.getElementById("cameraFrame");
+    const frame =
+        document.getElementById("cameraFrame");
 
     // Stop previous camera
     frame.src = "about:blank";
 
     // Load selected camera only
-    frame.src = CAMERA_BASE +
-        encodeURIComponent(cameraName);
+    setTimeout(function() {
+
+        frame.src = CAMERA_URLS[cameraName];
+
+    }, 150);
 
     // Update buttons
     document.getElementById("cam1Btn").className =
@@ -369,22 +386,33 @@ function selectCamera(cameraName) {
 
     // Update status
     document.getElementById("cameraStatus").innerText =
-        "📡 " + (cameraName === "KASHYAP" ? "CAMERA 1" : "CAMERA 2") +
-        " SELECTED";
+        cameraName === "KASHYAP"
+        ? "📡 CAMERA 1 SELECTED"
+        : "📡 CAMERA 2 SELECTED";
+
 }
+
+/* RECONNECT CAMERA */
 
 function reloadCamera() {
+
     selectCamera(selectedCamera);
+
 }
+
+/* FULL SCREEN CAMERA */
 
 function openCamera() {
+
     window.open(
-        CAMERA_BASE + encodeURIComponent(selectedCamera),
+        CAMERA_URLS[selectedCamera],
         "_blank"
     );
+
 }
 
-// Start with Camera 1
+/* START CAMERA 1 */
+
 selectCamera("KASHYAP");
 
 /* AUDIO FUNCTIONS */
@@ -403,20 +431,27 @@ function playAudio(id) {
     currentAudio.play().catch(error => {
         console.log("Audio playback error:", error);
     });
+
 }
 
 function pauseAudio() {
+
     if(currentAudio) {
         currentAudio.pause();
     }
+
 }
 
 function stopAudio() {
+
     if(currentAudio) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
     }
+
 }
+
+/* KEYBOARD SHORTCUTS */
 
 document.addEventListener("keydown",function(e) {
 
