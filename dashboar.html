@@ -133,6 +133,39 @@ button:hover {
     font-weight:bold;
 }
 
+/* VOLUME CONTROL */
+
+.volume-panel {
+    margin-top:22px;
+    padding:18px;
+    background:rgba(0,0,0,0.15);
+    border-radius:12px;
+    color:white;
+}
+
+.volume-heading {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.volume-slider {
+    width:100%;
+    max-width:500px;
+    cursor:pointer;
+    accent-color:#00ff80;
+}
+
+.volume-value {
+    font-size:20px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
 .footer {
     text-align:center;
     color:white;
@@ -214,6 +247,37 @@ button:hover {
         🚛 Gaadi Piche Lao
     </button>
 
+    <!-- VOLUME CONTROL -->
+
+    <div class="volume-panel">
+
+        <div class="volume-heading">
+            🔊 VOLUME ADJUSTMENT
+        </div>
+
+        <div>
+            <span>🔉 कम आवाज़</span>
+            &nbsp;&nbsp;
+            <span>🔊 ज्यादा आवाज़</span>
+        </div>
+
+        <br>
+
+        <input
+            type="range"
+            id="volumeSlider"
+            class="volume-slider"
+            min="0"
+            max="100"
+            value="100"
+            oninput="changeVolume(this.value)">
+
+        <div class="volume-value">
+            Volume: <span id="volumeValue">100%</span>
+        </div>
+
+    </div>
+
     <br><br>
 
     <p>
@@ -235,17 +299,21 @@ button:hover {
 
     <div class="camera-buttons">
 
+        <!-- CAMERA 1 = RAMAWATAR -->
+
         <button
             id="cam1Btn"
             class="green active"
-            onclick="selectCamera('KASHYAP')">
+            onclick="selectCamera('Ramawatar')">
             📹 CAMERA 1
         </button>
+
+        <!-- CAMERA 2 = KASHYAP -->
 
         <button
             id="cam2Btn"
             class="gray"
-            onclick="selectCamera('Ramawatar')">
+            onclick="selectCamera('KASHYAP')">
             📹 CAMERA 2
         </button>
 
@@ -346,17 +414,15 @@ function logout() {
 
 const CAMERA_URLS = {
 
-    KASHYAP:
-    "http://192.168.0.217:1984/stream.html?src=KASHYAP%20",
-
     Ramawatar:
-    "http://192.168.0.217:1984/stream.html?src=Ramawatar"
+    "http://192.168.0.217:1984/stream.html?src=Ramawatar",
+
+    KASHYAP:
+    "http://192.168.0.217:1984/stream.html?src=KASHYAP%20"
 
 };
 
-let selectedCamera = "KASHYAP";
-
-/* SELECT CAMERA */
+let selectedCamera = "Ramawatar";
 
 function selectCamera(cameraName) {
 
@@ -367,57 +433,54 @@ function selectCamera(cameraName) {
     const frame =
         document.getElementById("cameraFrame");
 
-    // Stop previous camera
     frame.src = "about:blank";
 
-    // Load selected camera only
     setTimeout(function() {
-
         frame.src = CAMERA_URLS[cameraName];
-
     }, 150);
 
-    // Update buttons
     document.getElementById("cam1Btn").className =
-        cameraName === "KASHYAP" ? "green active" : "gray";
-
-    document.getElementById("cam2Btn").className =
         cameraName === "Ramawatar" ? "green active" : "gray";
 
-    // Update status
+    document.getElementById("cam2Btn").className =
+        cameraName === "KASHYAP" ? "green active" : "gray";
+
     document.getElementById("cameraStatus").innerText =
-        cameraName === "KASHYAP"
-        ? "📡 CAMERA 1 SELECTED"
-        : "📡 CAMERA 2 SELECTED";
-
+        cameraName === "Ramawatar"
+        ? "📡 CAMERA 1 SELECTED - RAMAWATAR"
+        : "📡 CAMERA 2 SELECTED - KASHYAP";
 }
-
-/* RECONNECT CAMERA */
 
 function reloadCamera() {
-
     selectCamera(selectedCamera);
-
 }
-
-/* FULL SCREEN CAMERA */
 
 function openCamera() {
+    window.open(CAMERA_URLS[selectedCamera], "_blank");
+}
 
-    window.open(
-        CAMERA_URLS[selectedCamera],
-        "_blank"
-    );
+// START CAMERA 1
+selectCamera("Ramawatar");
+
+/* AUDIO VOLUME SETTINGS */
+
+let currentAudio = null;
+let currentVolume = 1;
+
+function changeVolume(value) {
+
+    currentVolume = Number(value) / 100;
+
+    document.getElementById("volumeValue").innerText =
+        value + "%";
+
+    document.querySelectorAll("audio").forEach(audio => {
+        audio.volume = currentVolume;
+    });
 
 }
 
-/* START CAMERA 1 */
-
-selectCamera("KASHYAP");
-
 /* AUDIO FUNCTIONS */
-
-let currentAudio = null;
 
 function playAudio(id) {
 
@@ -427,6 +490,8 @@ function playAudio(id) {
     }
 
     currentAudio = document.getElementById(id);
+
+    currentAudio.volume = currentVolume;
 
     currentAudio.play().catch(error => {
         console.log("Audio playback error:", error);
