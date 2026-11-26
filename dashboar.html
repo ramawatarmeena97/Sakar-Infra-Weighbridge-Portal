@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Sakar Infra Weighbridge Portal - Dashboard</title>
 
 <style>
@@ -90,6 +91,33 @@ button:hover {
     font-weight:bold;
 }
 
+/* LIVE CAMERA */
+
+.camera-panel {
+    text-align:center;
+}
+
+.camera-frame {
+    width:100%;
+    height:500px;
+    border:3px solid white;
+    border-radius:12px;
+    background:#111;
+    overflow:hidden;
+}
+
+.camera-frame iframe {
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+.camera-status {
+    color:white;
+    margin:12px 0;
+    font-weight:bold;
+}
+
 .footer {
     text-align:center;
     color:white;
@@ -97,7 +125,9 @@ button:hover {
 }
 
 @media(max-width:600px) {
-    body {padding:12px;}
+    body {
+        padding:12px;
+    }
 
     .header h1 {
         font-size:22px;
@@ -111,6 +141,10 @@ button:hover {
 
     .logout-btn {
         width:auto;
+    }
+
+    .camera-frame {
+        height:300px;
     }
 }
 </style>
@@ -130,6 +164,7 @@ button:hover {
 </div>
 
 <!-- AUDIO CONTROL PANEL -->
+
 <div class="card">
 
     <h2>🔊 Audio Control Panel</h2>
@@ -169,7 +204,44 @@ button:hover {
 
 </div>
 
+<!-- LIVE CAMERA PANEL -->
+
+<div class="card camera-panel">
+
+    <h2>📹 LIVE CAMERA MONITORING</h2>
+
+    <p style="margin:15px 0;">
+        Sakar Infra Weighbridge Live Camera
+    </p>
+
+    <div class="camera-frame">
+
+        <iframe
+            id="cameraFrame"
+            src="http://192.168.0.217:1984/stream.html?src=KASHYAP%20"
+            title="Sakar Infra Live Camera"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
+
+    </div>
+
+    <p class="camera-status">
+        📡 GO2RTC LIVE CAMERA
+    </p>
+
+    <button class="green" onclick="reloadCamera()">
+        🔄 RECONNECT CAMERA
+    </button>
+
+    <button class="blue" onclick="openCamera()">
+        🔍 OPEN CAMERA FULL SCREEN
+    </button>
+
+</div>
+
 <!-- WEIGHT SLIP PANEL -->
+
 <div class="card slip-panel">
 
     <h2>📄 Weight Slip Management</h2>
@@ -179,18 +251,19 @@ button:hover {
     </p>
 
     <button class="blue"
-    onclick="window.location.href='weight-slip.html'">
+        onclick="window.location.href='weight-slip.html'">
         ⚖ WEIGHT SLIP
     </button>
 
     <button class="green"
-    onclick="window.location.href='second-slip.html'">
+        onclick="window.location.href='second-slip.html'">
         📋 SECOND SLIP
     </button>
 
 </div>
 
-<!-- NEW E-RAWANNA PANEL -->
+<!-- E-RAWANNA PANEL -->
+
 <div class="card slip-panel">
 
     <h2>🚛 RajMines E-Rawanna Management</h2>
@@ -200,10 +273,8 @@ button:hover {
     </p>
 
     <button class="purple"
-    onclick="window.location.href='last-erawanna.html'">
-
+        onclick="window.location.href='last-erawanna.html'">
         🔍 LAST E-RAWANNA CHECK
-
     </button>
 
 </div>
@@ -215,6 +286,7 @@ button:hover {
 </div>
 
 <!-- AUDIO FILES -->
+
 <audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
 <audio id="galat" src="galat.mp3.mp3"></audio>
 <audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
@@ -231,6 +303,24 @@ function logout() {
     localStorage.removeItem("loggedIn");
     window.location.href="index.html";
 }
+
+/* CAMERA SETTINGS */
+
+const cameraURL =
+"http://192.168.0.217:1984/stream.html?src=KASHYAP%20";
+
+function reloadCamera() {
+
+    document.getElementById("cameraFrame").src =
+        cameraURL + "&reload=" + Date.now();
+
+}
+
+function openCamera() {
+    window.open(cameraURL, "_blank");
+}
+
+/* AUDIO FUNCTIONS */
 
 let currentAudio = null;
 
