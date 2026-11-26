@@ -91,7 +91,7 @@ button:hover {
     font-weight:bold;
 }
 
-/* LIVE CAMERA DESIGN */
+/* LIVE CAMERA */
 
 .camera-panel {
     text-align:center;
@@ -217,8 +217,9 @@ button:hover {
     <div class="camera-frame">
 
         <iframe
-            src="http://127.0.0.1:5000/"
-            title="Live Camera"
+            id="cameraFrame"
+            src="http://localhost:1984/stream.html?src=KASHYAP%20"
+            title="Sakar Infra Live Camera"
             allow="autoplay; fullscreen"
             allowfullscreen>
         </iframe>
@@ -226,11 +227,14 @@ button:hover {
     </div>
 
     <p class="camera-status">
-        📡 Camera Webpage
+        📡 GO2RTC LIVE CAMERA
     </p>
 
-    <button class="blue"
-        onclick="window.open('http://127.0.0.1:5000/','_blank')">
+    <button class="green" onclick="reloadCamera()">
+        🔄 RECONNECT CAMERA
+    </button>
+
+    <button class="blue" onclick="openCamera()">
         🔍 OPEN CAMERA FULL SCREEN
     </button>
 
@@ -270,9 +274,7 @@ button:hover {
 
     <button class="purple"
         onclick="window.location.href='last-erawanna.html'">
-
         🔍 LAST E-RAWANNA CHECK
-
     </button>
 
 </div>
@@ -301,6 +303,22 @@ function logout() {
     localStorage.removeItem("loggedIn");
     window.location.href="index.html";
 }
+
+/* CAMERA FUNCTIONS */
+
+const cameraURL =
+"http://localhost:1984/stream.html?src=KASHYAP%20";
+
+function reloadCamera() {
+    document.getElementById("cameraFrame").src =
+        cameraURL + "&reload=" + Date.now();
+}
+
+function openCamera() {
+    window.open(cameraURL, "_blank");
+}
+
+/* AUDIO FUNCTIONS */
 
 let currentAudio = null;
 
