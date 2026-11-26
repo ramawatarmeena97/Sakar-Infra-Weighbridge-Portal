@@ -91,31 +91,172 @@ button:hover {
     font-weight:bold;
 }
 
-/* LIVE CAMERA */
+/* AUDIO AND CAMERA SIDE-BY-SIDE ON DESKTOP */
+
+.top-dashboard-grid {
+    display:grid;
+    grid-template-columns:minmax(280px, 0.85fr) minmax(0, 1.5fr);
+    gap:18px;
+    align-items:start;
+}
+
+.top-dashboard-grid > .card {
+    min-width:0;
+    margin-bottom:25px;
+}
+
+.audio-panel {
+    height:fit-content;
+}
+
+@media(max-width:850px) {
+    .top-dashboard-grid {
+        grid-template-columns:1fr;
+        gap:0;
+    }
+}
+
+/* CAMERA PANEL */
 
 .camera-panel {
     text-align:center;
 }
 
+.camera-buttons {
+    margin:20px 0;
+}
+
+.camera-buttons button {
+    min-width:180px;
+    font-weight:bold;
+}
+
+.camera-buttons button.active {
+    background:#00c853;
+    color:white;
+    border:3px solid white;
+}
+
+.camera-buttons {
+    margin:14px 0;
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.camera-buttons button {
+    min-width:130px;
+    font-weight:bold;
+}
+
+.camera-buttons button.active {
+    background:#00c853;
+    color:white;
+    border:2px solid white;
+}
+
 .camera-frame {
     width:100%;
-    height:500px;
+    height:360px;
     border:3px solid white;
     border-radius:12px;
     background:#111;
     overflow:hidden;
+    position:relative;
+    cursor:grab;
+    touch-action:none;
 }
 
 .camera-frame iframe {
+    display:block;
     width:100%;
     height:100%;
     border:none;
+    transform:translate(var(--camera-pan-x, 0px), var(--camera-pan-y, 0px)) scale(var(--camera-zoom, 1));
+    transform-origin:center center;
+    pointer-events:none;
+}
+
+.camera-drag-layer {
+    position:absolute;
+    inset:0;
+    z-index:2;
+    cursor:grab;
+    touch-action:none;
+    background:transparent;
+}
+
+.camera-drag-layer.dragging {
+    cursor:grabbing;
+}
+.camera-zoom-controls {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:12px auto;
+    color:white;
+}
+.camera-zoom-controls button {
+    padding:7px 13px;
+    margin:0;
+}
+.camera-zoom-controls input[type="range"] {
+    width:150px;
+    cursor:pointer;
+    accent-color:#00ff80;
+}
+.camera-zoom-value {
+    min-width:48px;
+    font-weight:bold;
+    font-size:13px;
 }
 
 .camera-status {
     color:white;
     margin:12px 0;
     font-weight:bold;
+}
+
+@media(max-width:700px) {
+    .camera-frame {
+        height:300px;
+    }
+}
+
+/* VOLUME CONTROL */
+
+.volume-panel {
+    margin-top:22px;
+    padding:18px;
+    background:rgba(0,0,0,0.15);
+    border-radius:12px;
+    color:white;
+}
+
+.volume-heading {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.volume-slider {
+    width:100%;
+    max-width:500px;
+    cursor:pointer;
+    accent-color:#00ff80;
+}
+
+.volume-value {
+    font-size:20px;
+    font-weight:bold;
+    margin-top:10px;
 }
 
 .footer {
@@ -146,6 +287,10 @@ button:hover {
     .camera-frame {
         height:300px;
     }
+
+    .camera-buttons button {
+        width:100%;
+    }
 }
 </style>
 </head>
@@ -163,9 +308,13 @@ button:hover {
     </button>
 </div>
 
+<!-- AUDIO + CAMERA DESKTOP LAYOUT -->
+
+<div class="top-dashboard-grid">
+
 <!-- AUDIO CONTROL PANEL -->
 
-<div class="card">
+<div class="card audio-panel">
 
     <h2>🔊 Audio Control Panel</h2>
     <br>
@@ -195,6 +344,37 @@ button:hover {
         🚛 Gaadi Piche Lao
     </button>
 
+    <!-- VOLUME CONTROL -->
+
+    <div class="volume-panel">
+
+        <div class="volume-heading">
+            🔊 VOLUME ADJUSTMENT
+        </div>
+
+        <div>
+            <span>🔉 कम आवाज़</span>
+            &nbsp;&nbsp;
+            <span>🔊 ज्यादा आवाज़</span>
+        </div>
+
+        <br>
+
+        <input
+            type="range"
+            id="volumeSlider"
+            class="volume-slider"
+            min="0"
+            max="100"
+            value="100"
+            oninput="changeVolume(this.value)">
+
+        <div class="volume-value">
+            Volume: <span id="volumeValue">100%</span>
+        </div>
+
+    </div>
+
     <br><br>
 
     <p>
@@ -204,30 +384,60 @@ button:hover {
 
 </div>
 
-<!-- LIVE CAMERA PANEL -->
+<!-- TWO CAMERA PANEL -->
 
 <div class="card camera-panel">
 
     <h2>📹 LIVE CAMERA MONITORING</h2>
 
     <p style="margin:15px 0;">
-        Sakar Infra Weighbridge Live Camera
+        Select Camera to Watch Live
     </p>
 
-    <div class="camera-frame">
+    <div class="camera-buttons">
+        <button id="cam1Btn" class="green active"
+                onclick="selectCamera('Ramawatar')">
+            📹 CAMERA 1
+        </button>
 
+        <button id="cam2Btn" class="gray"
+                onclick="selectCamera('KASHYAP')">
+            📹 CAMERA 2
+        </button>
+    </div>
+
+    <div class="camera-frame" id="cameraViewport">
         <iframe
             id="cameraFrame"
-            src="http://localhost:1984/stream.html?src=KASHYAP%20"
             title="Sakar Infra Live Camera"
             allow="autoplay; fullscreen"
             allowfullscreen>
         </iframe>
-
+        <div
+            id="cameraDragLayer"
+            class="camera-drag-layer"
+            title="Zoom ke baad tasveer ko mouse se kheenchkar manpasand jagah par le jayein">
+        </div>
     </div>
 
-    <p class="camera-status">
-        📡 GO2RTC LIVE CAMERA
+    <div class="camera-zoom-controls">
+        <button class="gray" type="button" onclick="adjustCameraZoom(-10)">−</button>
+        <span>🔍 Zoom</span>
+        <input
+            type="range"
+            id="cameraZoomSlider"
+            min="100"
+            max="300"
+            step="5"
+            value="100"
+            oninput="setCameraZoom(this.value)">
+        <button class="gray" type="button" onclick="adjustCameraZoom(10)">+</button>
+        <span class="camera-zoom-value" id="cameraZoomValue">100%</span>
+        <button class="blue" type="button" onclick="resetCameraZoom()">Reset</button>
+    </div>
+
+    <p class="camera-status" id="cameraStatus">
+        📡 CAMERA 1 SELECTED - RAMAWATAR
     </p>
 
     <button class="green" onclick="reloadCamera()">
@@ -239,6 +449,8 @@ button:hover {
     </button>
 
 </div>
+
+</div><!-- end top-dashboard-grid -->
 
 <!-- WEIGHT SLIP PANEL -->
 
@@ -295,6 +507,8 @@ button:hover {
 
 <script>
 
+/* LOGIN SYSTEM */
+
 if(!localStorage.getItem("loggedIn")) {
     window.location.href="index.html";
 }
@@ -304,23 +518,161 @@ function logout() {
     window.location.href="index.html";
 }
 
-/* CAMERA FUNCTIONS */
+/* CAMERA SETTINGS - ONE CAMERA AT A TIME */
 
-const cameraURL =
-"http://localhost:1984/stream.html?src=KASHYAP%20";
+const CAMERA_URLS = {
+    Ramawatar: "http://192.168.0.217:1984/stream.html?src=Ramawatar",
+    KASHYAP: "http://192.168.0.217:1984/stream.html?src=KASHYAP%20"
+};
+
+let selectedCamera = "Ramawatar";
+
+function selectCamera(cameraName) {
+    if (!CAMERA_URLS[cameraName]) return;
+
+    selectedCamera = cameraName;
+
+    const frame = document.getElementById("cameraFrame");
+    frame.src = "about:blank";
+
+    setTimeout(function() {
+        frame.src = CAMERA_URLS[cameraName];
+    }, 150);
+
+    document.getElementById("cam1Btn").className =
+        cameraName === "Ramawatar" ? "green active" : "gray";
+
+    document.getElementById("cam2Btn").className =
+        cameraName === "KASHYAP" ? "green active" : "gray";
+
+    document.getElementById("cameraStatus").innerText =
+        cameraName === "Ramawatar"
+        ? "📡 CAMERA 1 SELECTED - RAMAWATAR"
+        : "📡 CAMERA 2 SELECTED - KASHYAP";
+}
 
 function reloadCamera() {
-    document.getElementById("cameraFrame").src =
-        cameraURL + "&reload=" + Date.now();
+    selectCamera(selectedCamera);
 }
 
 function openCamera() {
-    window.open(cameraURL, "_blank");
+    window.open(CAMERA_URLS[selectedCamera], "_blank");
+}
+
+/* SELECTED CAMERA ZOOM + DRAG TO POSITION */
+let cameraZoom = 100;
+let cameraPanX = 0;
+let cameraPanY = 0;
+let cameraDragActive = false;
+let cameraDragStartX = 0;
+let cameraDragStartY = 0;
+let cameraPanStartX = 0;
+let cameraPanStartY = 0;
+
+function applyCameraView() {
+    const frame = document.getElementById("cameraFrame");
+    frame.style.setProperty("--camera-zoom", cameraZoom / 100);
+    frame.style.setProperty("--camera-pan-x", cameraPanX + "px");
+    frame.style.setProperty("--camera-pan-y", cameraPanY + "px");
+}
+
+function setCameraZoom(value) {
+    cameraZoom = Math.max(100, Math.min(300, Number(value)));
+    document.getElementById("cameraZoomSlider").value = cameraZoom;
+    document.getElementById("cameraZoomValue").innerText = cameraZoom + "%";
+    applyCameraView();
+}
+
+function adjustCameraZoom(change) {
+    setCameraZoom(cameraZoom + change);
+}
+
+function resetCameraZoom() {
+    cameraZoom = 100;
+    cameraPanX = 0;
+    cameraPanY = 0;
+    setCameraZoom(100);
+    applyCameraView();
+}
+
+const cameraDragLayer = document.getElementById("cameraDragLayer");
+
+cameraDragLayer.addEventListener("pointerdown", function(event) {
+    cameraDragActive = true;
+    cameraDragStartX = event.clientX;
+    cameraDragStartY = event.clientY;
+    cameraPanStartX = cameraPanX;
+    cameraPanStartY = cameraPanY;
+    cameraDragLayer.classList.add("dragging");
+    cameraDragLayer.setPointerCapture(event.pointerId);
+});
+
+cameraDragLayer.addEventListener("pointermove", function(event) {
+    if (!cameraDragActive) return;
+    cameraPanX = cameraPanStartX + (event.clientX - cameraDragStartX);
+    cameraPanY = cameraPanStartY + (event.clientY - cameraDragStartY);
+    applyCameraView();
+});
+
+function stopCameraDrag() {
+    cameraDragActive = false;
+    cameraDragLayer.classList.remove("dragging");
+}
+
+cameraDragLayer.addEventListener("pointerup", stopCameraDrag);
+cameraDragLayer.addEventListener("pointercancel", stopCameraDrag);
+
+/* MOUSE WHEEL ZOOM - ZOOM TOWARD THE POINTER */
+cameraDragLayer.addEventListener("wheel", function(event) {
+    event.preventDefault();
+
+    const viewport = document.getElementById("cameraViewport");
+    const rect = viewport.getBoundingClientRect();
+
+    // Cursor position measured from the centre of the camera viewport.
+    const pointerX = event.clientX - (rect.left + rect.width / 2);
+    const pointerY = event.clientY - (rect.top + rect.height / 2);
+
+    const oldScale = cameraZoom / 100;
+    const step = event.deltaY < 0 ? 10 : -10;
+    const nextZoom = Math.max(100, Math.min(300, cameraZoom + step));
+    const newScale = nextZoom / 100;
+
+    if (newScale === oldScale) return;
+
+    // Keep the image point under the mouse cursor stationary while zooming.
+    cameraPanX = pointerX - (pointerX - cameraPanX) * (newScale / oldScale);
+    cameraPanY = pointerY - (pointerY - cameraPanY) * (newScale / oldScale);
+
+    cameraZoom = nextZoom;
+    document.getElementById("cameraZoomSlider").value = cameraZoom;
+    document.getElementById("cameraZoomValue").innerText = cameraZoom + "%";
+    applyCameraView();
+}, { passive: false });
+
+// START CAMERA 1 BY DEFAULT
+selectCamera("Ramawatar");
+setCameraZoom(100);
+
+/* AUDIO VOLUME SETTINGS */
+
+let currentAudio = null;
+let currentVolume = 1;
+
+function changeVolume(value) {
+
+    currentVolume = Number(value) / 100;
+
+    document.getElementById("volumeValue").innerText =
+        value + "%";
+
+    document.querySelectorAll("audio").forEach(audio => {
+        audio.volume = currentVolume;
+    });
+
 }
 
 /* AUDIO FUNCTIONS */
-
-let currentAudio = null;
 
 function playAudio(id) {
 
@@ -331,23 +683,32 @@ function playAudio(id) {
 
     currentAudio = document.getElementById(id);
 
+    currentAudio.volume = currentVolume;
+
     currentAudio.play().catch(error => {
         console.log("Audio playback error:", error);
     });
+
 }
 
 function pauseAudio() {
+
     if(currentAudio) {
         currentAudio.pause();
     }
+
 }
 
 function stopAudio() {
+
     if(currentAudio) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
     }
+
 }
+
+/* KEYBOARD SHORTCUTS */
 
 document.addEventListener("keydown",function(e) {
 
