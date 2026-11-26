@@ -1,137 +1,346 @@
-```html
+
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sakar Infra - Dashboard</title>
+
+<title>Sakar Infra Weighbridge Portal - Dashboard</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Segoe UI;
+}
+
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #eef2f7;
-    color: #172033;
+    min-height:100vh;
+    background:linear-gradient(135deg,#007bff,#00ffa6);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:30px;
+    color:#222;
 }
-header {
-    background: #142b4a;
-    color: white;
-    padding: 18px;
-    text-align: center;
+
+.wrapper {
+    max-width:1100px;
+    width:100%;
 }
-header h2 { margin: 0; }
-.container {
-    max-width: 850px;
-    margin: 25px auto;
-    padding: 15px;
+
+.header {
+    text-align:center;
+    margin-bottom:20px;
+    color:white;
+    position:relative;
 }
-.panel {
-    background: white;
-    padding: 22px;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px #0002;
-}
-h3 { margin-top: 0; color: #142b4a; }
-.audio-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
-    gap: 12px;
-}
-button {
-    border: 0;
-    border-radius: 8px;
-    padding: 14px;
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-}
-.audio-btn { background: #1769aa; }
-.stop-btn { background: #c62828; }
-.slip-btn {
-    background: #16834a;
-    width: 100%;
-    margin-top: 20px;
-    font-weight: bold;
-}
+
 .logout-btn {
-    background: #c62828;
-    margin-top: 15px;
+    position:absolute;
+    top:0;
+    right:0;
+    padding:8px 15px;
+    background:#e74c3c;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
 }
-button:hover { opacity: .88; }
+
+.card {
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(10px);
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    margin-bottom:25px;
+}
+
+button {
+    padding:12px 22px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    margin:5px;
+    transition:0.2s;
+}
+
+button:hover {
+    opacity:0.85;
+    transform:translateY(-2px);
+}
+
+.blue {background:#007bff;color:white;}
+.red {background:#ff3b3b;color:white;}
+.green {background:#00c853;color:white;}
+.gray {background:#444;color:white;}
+.purple {background:#7138d8;color:white;}
+
+.slip-panel {
+    text-align:center;
+}
+
+.slip-panel button {
+    min-width:240px;
+    padding:16px 25px;
+    font-size:17px;
+    font-weight:bold;
+}
+
+/* LIVE CAMERA DESIGN */
+
+.camera-panel {
+    text-align:center;
+}
+
+.camera-frame {
+    width:100%;
+    height:500px;
+    border:3px solid white;
+    border-radius:12px;
+    background:#111;
+    overflow:hidden;
+}
+
+.camera-frame iframe {
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+.camera-status {
+    color:white;
+    margin:12px 0;
+    font-weight:bold;
+}
+
+.footer {
+    text-align:center;
+    color:white;
+    margin-top:15px;
+}
+
+@media(max-width:600px) {
+    body {
+        padding:12px;
+    }
+
+    .header h1 {
+        font-size:22px;
+        padding-top:40px;
+    }
+
+    button {
+        width:100%;
+        margin:6px 0;
+    }
+
+    .logout-btn {
+        width:auto;
+    }
+
+    .camera-frame {
+        height:300px;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<header>
-    <h2>SAKAR INFRA MINERALS PRIVATE LIMITED</h2>
-    <p>WEIGHBRIDGE DASHBOARD</p>
-</header>
+<div class="wrapper">
 
-<div class="container">
+<div class="header">
+    <h1>🚚 Sakar Infra Weighbridge Portal 🚧</h1>
+    <p>Dashboard</p>
 
-    <div class="panel">
-        <h3>🔊 Audio Control Panel</h3>
+    <button class="logout-btn" onclick="logout()">
+        Logout
+    </button>
+</div>
 
-        <div class="audio-grid">
-            <button class="audio-btn" onclick="playAudio('vajan_sahi')">
-                1 - वजन सही
-            </button>
+<!-- AUDIO CONTROL PANEL -->
 
-            <button class="audio-btn" onclick="playAudio('galat')">
-                2 - वजन गलत
-            </button>
+<div class="card">
 
-            <button class="audio-btn" onclick="playAudio('site_band')">
-                3 - साइट बंद
-            </button>
+    <h2>🔊 Audio Control Panel</h2>
+    <br>
 
-            <button class="audio-btn" onclick="playAudio('gadi_aage')">
-                गाड़ी आगे
-            </button>
+    <button class="green" onclick="playAudio('vajan_sahi')">
+        Vajan Sahi Hai
+    </button>
 
-            <button class="audio-btn" onclick="playAudio('gadi_piche')">
-                गाड़ी पीछे
-            </button>
+    <button class="red" onclick="playAudio('galat')">
+        Vajan Galat Hai
+    </button>
 
-            <button class="stop-btn" onclick="stopAudio()">
-                0 - STOP AUDIO
-            </button>
-        </div>
+    <button class="blue" onclick="playAudio('site_band')">
+        Site Nahi Chal Rahi – Gaadi Piche Karein
+    </button>
 
-        <audio id="audioPlayer"></audio>
+    <br>
 
-        <button class="slip-btn"
-        onclick="window.location.href='weight-slip.html'">
-            📄 MANUAL WEIGHT SLIP OPEN
-        </button>
+    <button class="gray" onclick="pauseAudio()">⏸ Pause</button>
+    <button class="red" onclick="stopAudio()">⛔ Stop</button>
 
-        <button class="logout-btn" onclick="logout()">
-            LOGOUT
-        </button>
-    </div>
+    <button class="green" onclick="playAudio('gadi_aage')">
+        🚛 Gaadi Aage Lao
+    </button>
+
+    <button class="blue" onclick="playAudio('gadi_piche')">
+        🚛 Gaadi Piche Lao
+    </button>
+
+    <br><br>
+
+    <p>
+        <b>Keyboard Shortcuts:</b>
+        1 = Sahi • 2 = Galat • 3 = Site Band • 0 = Stop
+    </p>
 
 </div>
 
+<!-- LIVE CAMERA PANEL -->
+
+<div class="card camera-panel">
+
+    <h2>📹 LIVE CAMERA MONITORING</h2>
+
+    <p style="margin:15px 0;">
+        Sakar Infra Weighbridge Live Camera
+    </p>
+
+    <div class="camera-frame">
+
+        <iframe
+            src="http://127.0.0.1:5000/"
+            title="Live Camera"
+            allow="autoplay; fullscreen"
+            allowfullscreen>
+        </iframe>
+
+    </div>
+
+    <p class="camera-status">
+        📡 Camera Webpage
+    </p>
+
+    <button class="blue"
+        onclick="window.open('http://127.0.0.1:5000/','_blank')">
+        🔍 OPEN CAMERA FULL SCREEN
+    </button>
+
+</div>
+
+<!-- WEIGHT SLIP PANEL -->
+
+<div class="card slip-panel">
+
+    <h2>📄 Weight Slip Management</h2>
+
+    <p style="margin:15px 0;">
+        Select the page you want to open
+    </p>
+
+    <button class="blue"
+        onclick="window.location.href='weight-slip.html'">
+        ⚖ WEIGHT SLIP
+    </button>
+
+    <button class="green"
+        onclick="window.location.href='second-slip.html'">
+        📋 SECOND SLIP
+    </button>
+
+</div>
+
+<!-- E-RAWANNA PANEL -->
+
+<div class="card slip-panel">
+
+    <h2>🚛 RajMines E-Rawanna Management</h2>
+
+    <p style="margin:15px 0;">
+        Check Last E-Rawanna By Vehicle Number
+    </p>
+
+    <button class="purple"
+        onclick="window.location.href='last-erawanna.html'">
+
+        🔍 LAST E-RAWANNA CHECK
+
+    </button>
+
+</div>
+
+<div class="footer">
+    © 2026 Sakar Infra | All Rights Reserved
+</div>
+
+</div>
+
+<!-- AUDIO FILES -->
+
+<audio id="vajan_sahi" src="vajan_sahi_age.mp3.mpeg"></audio>
+<audio id="galat" src="galat.mp3.mp3"></audio>
+<audio id="site_band" src="site_nahi_chal_rhi.mp3"></audio>
+<audio id="gadi_aage" src="forward.wav"></audio>
+<audio id="gadi_piche" src="backward.wav"></audio>
+
 <script>
-if (localStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "index.html";
+
+if(!localStorage.getItem("loggedIn")) {
+    window.location.href="index.html";
 }
 
-const audioFiles = {
-    vajan_sahi: "vajan_sahi_age.mp3.mpeg",
-    galat: "galat.mp3.mp3",
-    site_band: "site_nahi_chal_rhi.mp3",
-    gadi_aage: "forward.wav",
-    gadi_piche: "backward.wav"
-};
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href="index.html";
+}
 
-const player = document.getElementById("audioPlayer");
+let currentAudio = null;
 
-function playAudio(name) {
-    player.pause();
-    player.src = audioFiles[name];
-    player.currentTime = 0;
-    player.play().catch(error => {
-        alert("Audio file नहीं चल पाई। File का नाम और location
+function playAudio(id) {
+
+    if(currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    currentAudio = document.getElementById(id);
+
+    currentAudio.play().catch(error => {
+        console.log("Audio playback error:", error);
+    });
+}
+
+function pauseAudio() {
+    if(currentAudio) {
+        currentAudio.pause();
+    }
+}
+
+function stopAudio() {
+    if(currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+}
+
+document.addEventListener("keydown",function(e) {
+
+    if(e.key === "1") playAudio("vajan_sahi");
+    if(e.key === "2") playAudio("galat");
+    if(e.key === "3") playAudio("site_band");
+    if(e.key === "0") stopAudio();
+
+});
+
+</script>
+
+</body>
+</html>
